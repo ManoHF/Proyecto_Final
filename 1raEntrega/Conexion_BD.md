@@ -90,7 +90,7 @@ es posible gracias al String de conexión obtenido en SQL Server.
   
   Una vez que corremos nuestra aplicación Web podemos ver que efectivamente aparecen los dos hospitales dados de alta
   
-  
+  ![Prueba_conexion_ddl](https://user-images.githubusercontent.com/70402438/116169549-8894f480-a6ca-11eb-885d-07eb1933f898.png)
   
   Le añadimos en este folder del repositorio un zip con el prototipo de la aplicación web. Hay que tomar en cuenta ciertas cosas:
   * se tiene que cambiar en el string el Data Source por el nombre de su computadora
