@@ -10,7 +10,7 @@ Para realizar la captura de información se utiliza una entrevista dividida en v
 
 Sin embargo, la inserción de los datos no es tan sencilla, por eso la segunda parte incluye su limpieza. En los llenados de entrevistas, por lo general, ocurren muchos errores humanos que pueden alterar la información. Dentro de estos errores podemos ver malos formatos de teléfonos, espacios en blanco, o información incorrecta. Ésto tiene que ser corregido en el proceso hacia la base de datos o se tiene que evitar dándole cierto formato a la entrevista.
 
-Para finalizar es necesario realizar el análisis y la presentación de los datos. Esto es muy importante, ya que Voxmapp tiene objetivos cívicos, por lo que tener la información nada más guardada no sirve de nada. Es necesario diseñar la base de datos de manera que podamos obtener vistas susatanciosas y relevantes para sus tablas. Mediante estas vistas presentadas, en herramientas como Tableau, para que otras personas puedan ver la información.
+Para finalizar es necesario realizar el análisis y la presentación de los datos. Esto es muy importante, ya que Voxmapp tiene objetivos cívicos, por lo que tener la información nada más guardada no sirve de nada. Es necesario diseñar la base de datos de manera que podamos obtener vistas sustanciosas y relevantes para sus tablas. Mediante estas vistas presentadas, en herramientas como Tableau, para que otras personas puedan ver la información.
 
 ## User Story
 
@@ -19,7 +19,7 @@ están incluidos: ID único, datos geográficos (latitud, longitud, altitud), no
 * Un hospital puede tener múltiples teléfonos, pero estarán en constante cambio, ya que en muchos hospitales no hay teléfonos fijos, por lo que usan particulares.
 * Un hospital tiene múltiples doctores asociados a alguna facultad del hospital; no son necesariamente fijos de alguna y pueden cambiar de hospital
 
-Los hospitales van a tener un inventario
+A cada una de estos hospitales se les realizará una entrevista mensual, la cual se reflejara como un "update" en nuestra base de datos. Cada uno de estos updates será registrado por un usuario de Voxmapp y constestado por algún contacto del hospital del cual se recuperarán sus datos de contacto.
 
 Un hospital va a tener múltiples cuestionarios, ya que busca dar un monitoreo por mes de cada uno, por lo que habría un registro mes por mes. Cada una de esas entrevistas tiene asociado un usuario encargado de hacer la baseline y un contacto que contestó la entrevista. Ambos pueden ser distintos cada mes. El cuestionario pueden recibirse en tres estados: completo, parcialmente completo, y no completo. Se pueden observar tanto cuestionarios "limpios" como "sucios". Hay distintas razones por las cuales un cuestionario esté incompleto. Dependiendo de la razón, se le asigna una acción correspondiente para pasar el estado a cuestionario completo.
  * Existe una distinción entre hospitales con entrevistas recolectadas y los que faltan por recolectar
