@@ -49,5 +49,29 @@ namespace Proyecto_BD
                 return -1;
             }
         }
+        
+        public int cuentaHospital()
+        {
+            int res = -1;
+            try
+            {
+                NpgsqlConnection con;
+                NpgsqlDataReader rd;
+                con = Conexion.agregarConexion();
+                NpgsqlCommand cmd = new NpgsqlCommand("select count(*) from voxmapp.hospital", con);
+                rd = cmd.ExecuteReader();
+                if (rd.Read())
+                {
+                    res = rd.GetInt32(0);
+                }
+                rd.Close();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                res = -1;
+            }
+            return res;
+        }
     }
 }
