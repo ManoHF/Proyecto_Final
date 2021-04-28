@@ -69,6 +69,7 @@ namespace Proyecto_BD
                 Button1.Enabled = false;
                 ddHospital.Items.Clear();
                 Conexion.llenarHospital(ddHospital);
+                ddHospital.SelectedIndex = h.cuentaHospital();
             }
             else
                 lbRegistro.Text = "Fallo en el registro";
