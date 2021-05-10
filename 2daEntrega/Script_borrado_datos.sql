@@ -1,0 +1,13 @@
+--Script de delete de la BD VOXMAPP--
+
+DELETE FROM hospital_structure_for_historicals ;
+DELETE FROM covid_protocol;
+DELETE FROM inventory;
+DELETE FROM patient_statistics;
+DELETE FROM staff;
+DELETE FROM person;
+DELETE FROM contact;
+DELETE FROM telephone;
+DELETE FROM hospital;
+DELETE FROM users;
+DELETE FROM interview;
