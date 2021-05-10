@@ -16,8 +16,8 @@ drop table telephone;
 
 drop table contact;
 
+drop table interview;
+
 drop table users;
 
 drop table hospital;
-
-drop table interview;
