@@ -8,6 +8,6 @@ DELETE FROM staff;
 DELETE FROM person;
 DELETE FROM contact;
 DELETE FROM telephone;
+DELETE FROM interview;
 DELETE FROM hospital;
 DELETE FROM users;
-DELETE FROM interview;
