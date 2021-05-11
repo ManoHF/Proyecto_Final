@@ -1,6 +1,6 @@
 -- Script Drop tables --
 
-drop table hospital_structure_for_historicals;
+drop table hospital_structure;
 
 drop table covid_protocol;
 
