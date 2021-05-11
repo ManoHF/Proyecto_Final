@@ -15,7 +15,7 @@ create table hospital(
 	CONSTRAINT hospital_pkey PRIMARY KEY (id_hospital)
 );
 
---Creación de la tabla usuer--
+--Creación de la tabla user--
 create table users(
 id_user serial not null,
 u_name varchar(200) not null,
