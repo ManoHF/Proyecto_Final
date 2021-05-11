@@ -23,7 +23,7 @@ u_position varchar(200) not null,
 phone bigint not null,
 mail varchar(50) not null,
 last_update timestamp not null default now(),
-constraint users_pkey primary key (id_user)
+constraint users_pkey primary key (id_users)
 );
 
 --Creación de tabla Interview--
