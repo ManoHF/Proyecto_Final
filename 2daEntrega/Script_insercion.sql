@@ -267,7 +267,7 @@ values('FELIX CONTRERAS','Field interviewer',644307300,'fcontreras@voxmapp.com')
 ('DELIA MUIRNE', 'EMPLOYEE', 929902292, 'DEL_I_A@YAHOO.COM');
 
 --Insert data interview--
-insert into interview (id_hospital,id_user,status,problems,actions)
+insert into interview (id_hospital,id_users,status,problems,actions)
 values(1,1,'QUESTIONNAIRE COMPLETED','NO PROBLEM', 'NO ADDITIONAL ACTION NEEDED'),
 (2,2,'QUESTIONNAIRE COMPLETED','NO PROBLEM', 'NO ADDITIONAL ACTION NEEDED'),
 (3,3,'QUESTIONNAIRE COMPLETED','NO PROBLEM', 'NO ADDITIONAL ACTION NEEDED'),
@@ -1354,7 +1354,7 @@ values(1,218,645431416),
 (130, 961, 9081058886);
 
 --Insert data hospital_structure--
-insert into hospital_structure(id_hospital,id_inventory,id_patients_statistics,id_covid_protocol,id_staff)
+insert into hospital_structure(id_hospital,id_inventory,id_patient_statistics,id_covid_protocol,id_staff)
 values(1,1,1,1,1),
 (2,2,2,2,2),
 (3,3,3,3,3),
