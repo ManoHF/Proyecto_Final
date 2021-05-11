@@ -30,7 +30,7 @@ constraint users_pkey primary key (id_users)
 create table interview(
 	id_interview serial not null,
 	id_hospital int4 not null,
-	id_user int4 not null,
+	id_users int4 not null,
 	moph int default null,
 	status varchar(100) not null,
 	problems varchar(100),
@@ -141,7 +141,7 @@ create table hospital_structure (
 	id_hospital_structure serial not null,
 	id_hospital int4 not null,
 	id_inventory int4 not null,
-	id_patients_statistics int4 not null,
+	id_patient_statistics int4 not null,
 	id_covid_protocol int4 not null,
 	id_staff int4 not null,
 	last_update timestamp NOT NULL DEFAULT now(),
