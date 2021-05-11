@@ -956,7 +956,7 @@ values(1,30,7,7,15,15,15,0,7,30,30,30,0),
 (130, 30,15,15,0,7,0,0,15,3,7,0,3);
 
 --Insert data patient_statistics--
-insert into patient_statistics(id_hospital,amount_last_month_wcovid_symptoms,amount_last_month_tested_positive_covid,amount_last_month_in_intensive_care_wcovid,amount_last_month_deaths_by_covid,amount_last_month_deaths_non_covid,amount_last_month_recovered_from_covid)
+insert into patient_statistics(id_hospital,amount_last_month_covid_symptoms,amount_last_month_tested_positive_covid,amount_last_month_in_intensive_care_wcovid,amount_last_month_deaths_by_covid,amount_last_month_deaths_non_covid,amount_last_month_recovered_from_covid)
 values(1,'10-200','801-1000','201-400','10-200','201-400','401-600'),
 (2,'201-400','10-200','601-800','401-600','601-800','801-1000'),
 (3,'10-200','10-200','201-400','401-600','201-400','201-400'),
