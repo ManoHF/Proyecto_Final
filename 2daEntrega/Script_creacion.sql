@@ -16,8 +16,8 @@ create table hospital(
 );
 
 --Creación de la tabla user--
-create table user(
-id_user serial not null,
+create table users(
+id_users serial not null,
 u_name varchar(200) not null,
 u_position varchar(200) not null,
 phone bigint not null,
@@ -38,7 +38,7 @@ create table interview(
 	last_update timestamp NOT NULL DEFAULT now(),
 	CONSTRAINT interview_pkey PRIMARY KEY (id_interview),
 	CONSTRAINT interview_id_hospital_fkey FOREIGN KEY (id_hospital) REFERENCES hospital(id_hospital) ON UPDATE CASCADE ON DELETE restrict,
-	CONSTRAINT interview_id_user_fkey FOREIGN KEY (id_user) REFERENCES users(id_user) ON UPDATE CASCADE ON DELETE RESTRICT
+	CONSTRAINT interview_id_users_fkey FOREIGN KEY (id_users) REFERENCES users(id_users) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
 --Creación de la tabla teléfono--
