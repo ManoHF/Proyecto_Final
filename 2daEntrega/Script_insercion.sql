@@ -1354,7 +1354,7 @@ values(1,218,645431416),
 (130, 961, 9081058886);
 
 --Insert data hospital_structure--
-insert into hospital_structure_for_historicals(id_hospital,id_inventory,id_patients_statistics,id_covid_protocol,id_staff)
+insert into hospital_structure(id_hospital,id_inventory,id_patients_statistics,id_covid_protocol,id_staff)
 values(1,1,1,1,1),
 (2,2,2,2,2),
 (3,3,3,3,3),
