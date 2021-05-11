@@ -31,6 +31,7 @@ create table interview(
 	id_interview serial not null,
 	id_hospital int4 not null,
 	id_user int4 not null,
+	moph int default null,
 	status varchar(100) not null,
 	problems varchar(100) not null,
 	actions varchar(100) not null,
