@@ -41,7 +41,7 @@ namespace Proyecto_BD
             NpgsqlConnection con = Conexion.agregarConexion();
             NpgsqlDataReader rd;
             int res=-1;
-            String q = "Select nextval(pg_get_serial_sequence('voxmapp.hospital', 'id_hospital'))";
+            String q = "Select currval(pg_get_serial_sequence('voxmapp.hospital', 'id_hospital'))";
             String query = "insert into voxmapp.hospital (latitude, lengths, altitude, name_hospital, district, province, country, type_of_hospital, last_update) values (" +
                 latitud + ", " + longitud + ", " + altura + ", " + "'" + nombre + "', '" + distrito + "', '" + provincia + "', '" + pais + "', '" + tipo_hospital + "', now())";
             try
@@ -52,7 +52,7 @@ namespace Proyecto_BD
                 rd = cmd.ExecuteReader();
                 if (rd.Read())
                 {
-                    res = rd.GetInt16(0)-1;
+                    res = rd.GetInt16(0);
                 }
                 con.Close();
                 return res;
