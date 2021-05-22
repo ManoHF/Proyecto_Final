@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -39,11 +39,11 @@ namespace Proyecto_BD
             NpgsqlConnection con;
             NpgsqlDataReader rd;
             int res = -1;
-            String q = "Select nextval(pg_get_serial_sequence('voxmapp.patient_statistics', 'id_patient_statistics'))";
+            String q = "Select currval(pg_get_serial_sequence('voxmapp.patient_statistics', 'id_patient_statistics'))";
             String query = "insert into voxmapp.patient_statistics (id_hospital, amount_last_month_covid_symptoms, amount_last_month_tested_positive_covid, amount_last_month_in_intensive_care_wcovid, amount_last_month_deaths_by_covid, " +
-                " amount_last_month_deaths_non_covid, amount_last_month_recovered_from_covid) values (" + id_hospital + ", '" +
-                amount_last_month_covid_symptoms + "', '" + amount_last_month_tested_positive_covid + "', '" + amount_last_month_in_intensive_care_wcovid +
-                "', '" + amount_last_month_deaths_by_covid + "', '" + amount_last_month_deaths_non_covid + "', '" + amount_last_month_recovered_from_covid + "')";
+                " amount_last_month_deaths_non_covid, amount_last_month_recovered_from_covid) values (" + id_hospital + ", " +
+                amount_last_month_covid_symptoms + ", " + amount_last_month_tested_positive_covid + ", " + amount_last_month_in_intensive_care_wcovid +
+                ", " + amount_last_month_deaths_by_covid + ", " + amount_last_month_deaths_non_covid + ", " + amount_last_month_recovered_from_covid + ")";
             try
             {
                 con = Conexion.agregarConexion();
@@ -53,7 +53,7 @@ namespace Proyecto_BD
                 rd = cmd.ExecuteReader();
                 if (rd.Read())
                 {
-                    res = rd.GetInt16(0) - 1;
+                    res = rd.GetInt16(0);
                 }
                 con.Close();
                 return res;
