@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -31,9 +31,9 @@ namespace Proyecto_BD
             NpgsqlConnection con;
             NpgsqlDataReader rd;
             int res = -1;
-            String q = "Select nextval(pg_get_serial_sequence('voxmapp.staff', 'id_staff'))";
-            String query = "insert into voxmapp.staff (id_hospital,amount_of_doctors_in_hospital, amount_of_paramedical_staff_in_hospital) values (" +
-               id_hospital + ", '" + amount_of_doctors_in_hospital + "', '" + amount_of_paramedical_staff_in_hospital + "')";
+            String q = "Select currval(pg_get_serial_sequence('voxmapp.staff', 'id_staff'))";
+            String query = "insert into voxmapp.staff (id_hospital, amount_of_doctors_in_hospital, amount_of_paramedical_staff_in_hospital) values (" +
+               id_hospital + ", " + amount_of_doctors_in_hospital + ", " + amount_of_paramedical_staff_in_hospital + ")";
             try
             {
                 con = Conexion.agregarConexion();
@@ -43,7 +43,7 @@ namespace Proyecto_BD
                 rd = cmd2.ExecuteReader();
                 if (rd.Read())
                 {
-                    res = rd.GetInt16(0)-1;
+                    res = rd.GetInt16(0);
                 } 
                 con.Close();
                 return res;
