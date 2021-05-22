@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -122,43 +122,6 @@ namespace Proyecto_BD
             }
         }
 
-        public static void llenarDDLNumeros1(DropDownList dd)
-        {
-            try
-            {
-                dd.Items.Add("[Select an answer]");
-                dd.Items.Add("0-200");
-                dd.Items.Add("201-400");
-                dd.Items.Add("401-600");
-                dd.Items.Add("601-800");
-                dd.Items.Add("801-1000");
-                dd.SelectedIndex = 0;
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
-        public static void llenarDDLNumeros2(DropDownList dd)
-        {
-            try
-            {
-                dd.Items.Add("[Select an answer]");
-                dd.Items.Add("9");
-                dd.Items.Add("10-200");
-                dd.Items.Add("201-400");
-                dd.Items.Add("401-600");
-                dd.Items.Add("601-800");
-                dd.Items.Add("801-1000");
-                dd.SelectedIndex = 0;
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
         public static void llenarDDLStatus(DropDownList dd)
         {
             try
@@ -199,7 +162,7 @@ namespace Proyecto_BD
         {
             try
             {
-                dd.Items.Add("[Selecciona una respuesta]");
+                dd.Items.Add("[Select an answer]");
                 dd.Items.Add("No additional action needed");
                 dd.Items.Add("Call back tomorrow to complete data");
                 dd.Items.Add("Find new phone number");
