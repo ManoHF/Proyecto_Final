@@ -1,10 +1,21 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="Proyecto_BD.Index" %>
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="Proyecto_BD.Index" %>
 
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
+    <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+  
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -15,10 +26,11 @@
                 </h1>
             </center>
             <h3 style="color:white; font-family:'Courier New'">
+                <asp:Label ID="lbRes" runat="server" Text="" ForeColor="Red" Font-Size="Large"></asp:Label><br />
                 Select your hospital:
             </h3>
-            <asp:DropDownList ID="ddHospital" runat="server" Height="30px" Width="442px">
-            </asp:DropDownList> <br />
+            <asp:DropDownList ID="ddHospital" runat="server" Height="30px" Width="442px"> 
+            </asp:DropDownList> <asp:Label ID="lbHos" runat="server" Text="" ForeColor="Red" Font-Size="Large"></asp:Label> <br />
             <h3 style="color:white; font-family:'Courier New'">
                 If it is not in the list, register it here: <br /><br />
                 Latitude:&nbsp;&nbsp;&nbsp;  <asp:TextBox ID="tbLat" runat="server"></asp:TextBox> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <asp:TextBox ID="tbNom" runat="server"></asp:TextBox> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Country: <asp:TextBox ID="tbPa" runat="server"></asp:TextBox> <br />
@@ -37,12 +49,12 @@
             </h3 >
             <h3 style="color:white; font-family:'Courier New'">
                 Phone number (10 digits):&nbsp;&nbsp;&nbsp;  
-                <asp:TextBox ID="tbPhone" runat="server"></asp:TextBox>
+                <asp:TextBox ID="tbPhone" runat="server" TextMode="Number" onkeypress="return this.value.length<=9" ></asp:TextBox>
             &nbsp;&nbsp;&nbsp;&nbsp;
                 <asp:Button ID="btNewPhone" runat="server" Height="34px" Text="Register phone" Width="132px" OnClick="btNewPhone_Click" />
 &nbsp;<asp:Button ID="btUpdate" runat="server" Height="34px" Text="Update" Width="132px" OnClick="btUpdate_Click" /> <br />
                 Lada:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <asp:TextBox ID="tbLada" runat="server"></asp:TextBox>
+                <asp:TextBox ID="tbLada" runat="server" TextMode="Number" onkeypress="return this.value.length<=2" ></asp:TextBox>
                 <h3 style="color:black; font-family:'Courier New'">
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <asp:Label ID="lbPhone" runat="server"></asp:Label>
                 <br />
@@ -136,37 +148,37 @@
                 <br /><br />
 
                 19) Number of doctors working in this health facility/ hospital: <br /><br />
-                 <asp:DropDownList ID="ddlNum19" runat="server" Height="40px" Width="382px" Font-Size="Large"></asp:DropDownList>
+                <asp:TextBox ID="tbDoctors" runat="server" Height="35px" Width="350px" TextMode="Number" Font-Size="Large"></asp:TextBox> 
                 <br /><br />
 
                 20) Number of paramedical staff working in this health facility/ hospital: <br /><br />
-                 <asp:DropDownList ID="ddlNum20" runat="server" Height="40px" Width="382px" Font-Size="Large"></asp:DropDownList>
+                <asp:TextBox ID="tbParamedics" runat="server" Height="35px" Width="350px" TextMode="Number" Font-Size="Large"></asp:TextBox>
                 <br /><br />
 
-                <u> On the next questions, if you do not know the answer, select 9  </u><br /><br />
+                <u> On the next questions, if you do not know the answer, leave it blank  </u><br /><br />
 
                 21) Last month, how many patients with COVID symptoms have you observed? (fever, cough, shortness of breath) <br /><br />
-                <asp:DropDownList ID="ddlNum21" runat="server" Height="40px" Width="382px" Font-Size="Large"></asp:DropDownList>
+                <asp:TextBox ID="tbQ21" runat="server" Height="35px" Width="350px" TextMode="Number" Font-Size="Large"></asp:TextBox>
                 <br /><br />
 
                 22) Last month, how many patients have tested positive for COVID? <br /><br />
-                <asp:DropDownList ID="ddlNum22" runat="server" Height="40px" Width="382px" Font-Size="Large"></asp:DropDownList>
+                <asp:TextBox ID="tbQ22" runat="server" Height="35px" Width="350px" TextMode="Number" Font-Size="Large"></asp:TextBox>
                 <br /><br />
 
                 23) Last month, how many patients are in intensive care with COVID symptoms and/or testing positive for COVID in this hospital? <br /><br />
-                <asp:DropDownList ID="ddlNum23" runat="server" Height="40px" Width="382px" Font-Size="Large"></asp:DropDownList>
+                <asp:TextBox ID="tbQ23" runat="server" Height="35px" Width="350px" TextMode="Number" Font-Size="Large"></asp:TextBox>
                 <br /><br />
 
                 24) Number of deaths from COVID-19 during the last month in this hospital: <br /><br />
-                <asp:DropDownList ID="ddlNum24" runat="server" Height="40px" Width="382px" Font-Size="Large"></asp:DropDownList>
+                <asp:TextBox ID="tbQ24" runat="server" Height="35px" Width="350px" TextMode="Number" Font-Size="Large"></asp:TextBox>
                 <br /><br />
 
                 25) Number of non-COVID-19 deaths during last month: <br /><br />
-                <asp:DropDownList ID="ddlNum25" runat="server" Height="40px" Width="382px" Font-Size="Large"></asp:DropDownList>
+                <asp:TextBox ID="tbQ25" runat="server" Height="35px" Width="350px" TextMode="Number" Font-Size="Large"></asp:TextBox>
                 <br /><br />
 
                 26) Number of patients recovered from COVID-19 out of hospital during the last month: <br /><br />
-                <asp:DropDownList ID="ddlNum26" runat="server" Height="40px" Width="382px" Font-Size="Large"></asp:DropDownList>
+                <asp:TextBox ID="tbQ26" runat="server" Height="35px" Width="350px" TextMode="Number" Font-Size="Large"></asp:TextBox>
                 <br /><br />
 
             </h2>
@@ -176,10 +188,10 @@
             </h1>
             <hr />
             <h2 style="color:white; font-family:'Courier New'">
-                Ministry of Public Health number: <asp:TextBox ID="tbMOPH" runat="server"></asp:TextBox> <br /> <br />
+                Ministry of Public Health number: <asp:TextBox ID="tbMOPH" runat="server" TextMode="Number"></asp:TextBox> <br /> <br />
 
                 Questionnaire status: <br /><br />
-                <asp:DropDownList ID="ddlM1" runat="server" Height="40px" Width="382px" Font-Size="Large"></asp:DropDownList>
+                <asp:DropDownList ID="ddlM1" runat="server" Height="40px" Width="382px" Font-Size="Large"></asp:DropDownList> <asp:Label ID="lbStatus" runat="server" Text="" ForeColor="Red" Font-Size="Large"></asp:Label>
                 <br /><br />
 
                 Problems: <br /><br />
@@ -193,7 +205,7 @@
             </h2>
             <h2 style="color:white; font-family:'Courier New'">
                 Select your User_ID:
-                <asp:DropDownList ID="ddlUser" runat="server" Height="40px" Width="194px" Font-Size="Large"></asp:DropDownList>
+                <asp:DropDownList ID="ddlUser" runat="server" Height="40px" Width="194px" Font-Size="Large"></asp:DropDownList><asp:Label ID="lbUser" runat="server" Text="" ForeColor="Red" Font-Size="Large"></asp:Label>
                 <br /><br />
             </h2>
             <center>
