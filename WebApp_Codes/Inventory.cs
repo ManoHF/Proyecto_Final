@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,25 +10,25 @@ namespace Proyecto_BD
 	public class Inventory
 	{
 		private int id_hospital;
-		private int oxygen;
-		private int antypiretic;
-		private int anesthesia;
-		private int soap_alcohol_solution;
-		private int disposable_masks;
-		private int disposable_gloves;
-		private int disposable_hats;
-		private int disposable_aprons;
-		private int surgical_gloves;
-		private int shoe_covers;
-		private int visors;
-		private int covid_test_kits;
+		private string oxygen;
+		private string antypiretic;
+		private string anesthesia;
+		private string soap_alcohol_solution;
+		private string disposable_masks;
+		private string disposable_gloves;
+		private string disposable_hats;
+		private string disposable_aprons;
+		private string surgical_gloves;
+		private string shoe_covers;
+		private string visors;
+		private string covid_test_kits;
 		Inventory i;
 
         public Inventory()
         {
         }
 
-        public Inventory(int id_hospital, int oxygen, int antypiretic, int anesthesia, int soap_alcohol_solution, int disposable_masks, int disposable_gloves, int disposable_hats, int disposable_aprons, int surgical_gloves, int shoe_covers, int visors, int covid_test_kits)
+        public Inventory(int id_hospital, string oxygen, string antypiretic, string anesthesia, string soap_alcohol_solution, string disposable_masks, string disposable_gloves, string disposable_hats, string disposable_aprons, string surgical_gloves, string shoe_covers, string visors, string covid_test_kits)
         {
             this.id_hospital = id_hospital;
             this.oxygen = oxygen;
@@ -51,7 +51,7 @@ namespace Proyecto_BD
 			NpgsqlConnection con;
 			NpgsqlDataReader rd;
 			int res = -1;
-			String q = "Select nextval(pg_get_serial_sequence('voxmapp.inventory', 'id_inventory'))";
+			String q = "Select currval(pg_get_serial_sequence('voxmapp.inventory', 'id_inventory'))";
 			String query = "insert into voxmapp.inventory (id_hospital, oxygen, antypiretic, anesthesia, soap_alcohol_solution, disposable_masks, disposable_gloves, disposable_hats, disposable_aprons, surgical_gloves, shoe_covers, visors, covid_test_kits) values (" + id_hospital + ", " +
 				oxygen + ", " + antypiretic + ", " + anesthesia + ", " + soap_alcohol_solution + ", " + disposable_masks + ", " + disposable_gloves + ", " + disposable_hats + ", " + disposable_aprons + ", " + surgical_gloves + ", " + shoe_covers + ", " + visors + ", " + covid_test_kits + ")";
 			try
@@ -63,7 +63,7 @@ namespace Proyecto_BD
 				rd = cmd2.ExecuteReader();
 				if (rd.Read())
 				{
-					res = rd.GetInt16(0) - 1;
+					res = rd.GetInt16(0);
 				}
 				con.Close();
 				return res;
