@@ -1,80 +1,5 @@
 # Documentación de vistas
 
-## Vista 3: Recuperados de COVID
-
-La cantidad de recuperados es un dato clave, para así poder conocer el estado actual del país ante los infectados. Con esta información, se puede conocer la tasa de reacción de los pacientes ante la enfermedad. Además, de poder observar cómo es el proceso de recuperación, su tiempo y su efectividad.
-
-La vista nos muestra la cantidad de pacientes, los cuales se recuperaron del COVID-19, organizándolo por mes y por país. Es decir, la vista nos va a proporcionar país, cantidad de recuperados y fecha en la que se registraron estos datos. De igual forma queremos saber el estado actual del inventario, por lo que se toma la última actualización.
-
-La vista se crea de la manera siguiente:
-```
-create view recovered_by_covid as(
-with recovered_by_covid as (
-	select id_hospital as id_hosp, country as countrys from hospital
-	order by country asc
-), sec as(
-	select ps.amount_last_month_recovered_from_covid as count_cases, rc.id_hosp as id, lower(rc.countrys) as countryy,
-	ps.last_update - extract(day from ps.last_update)*'1 day'::interval + '1 day'::interval as star_date_month, 
-	ps.last_update - extract(day from ps.last_update)*'1 day'::interval + '1 day'::interval + 30*'1 day':: interval as month_end_date,
-	extract(month from ps.last_update)
-	from recovered_by_covid rc 
-	join patient_statistics ps on (rc.id_hosp = ps.id_hospital)
-	window w as (partition by extract(month from ps.last_update), lower(rc.countrys) order by rc.countrys)
-	order by rc.countrys asc 
-)
-	select sum(s.count_cases) as recovered_by_covid, upper(s.countryy) as country, s.star_date_month, s.month_end_date
-	from sec s
-	group by s.countryy, s.star_date_month, s.month_end_date
-	order by s.countryy);
-```
-
-Se llama de la siguiente forma:
-```
-select * from recovered_by_covid;
-```
-
-y se da de baja:
-```
-drop view recovered_by_covid;
-```
-
-## Vista 4:
-
-Es muy importante conocer la cantidad de pacientes a los que se les ha detectado el virus, a través de los meses, esto es para así poder conocer la reincidencia que las personas tienen en el país. A mayor casos detectados, mayor reincidencia en el país, o por el contrario, si en el estudio de los meses se detecta menos casos cada mes, entonces, menor reincidencia. 
-
-La vista nos muestra la cantidad de pacientes, a los cuales se les detectó el COVID-19, organizándolo por mes y por país. Es decir, la vista nos va a proporcionar país, cantidad de testeados positivos y fecha en la que se registraron estos datos.
-
-```
-create view tested_positive_to_covid as(
-with tested_positive_to_covid as (
-	select id_hospital as id_hosp, country as countrys from hospital
-	order by country asc
-), sec as(
-	select ps.amount_last_month_tested_positive_covid as count_cases, tc.id_hosp as id, lower(tc.countrys) as countryy,
-	ps.last_update - extract(day from ps.last_update)*'1 day'::interval + '1 day'::interval as star_date_month, 
-	ps.last_update - extract(day from ps.last_update)*'1 day'::interval + '1 day'::interval + 30*'1 day':: interval as month_end_date,
-	extract(month from ps.last_update)
-	from tested_positive_to_covid tc 
-	join patient_statistics ps on (tc.id_hosp = ps.id_hospital)
-	window w as (partition by extract(month from ps.last_update), lower(tc.countrys) order by tc.countrys)
-	order by tc.countrys asc 
-)
-	select sum(s.count_cases) as tested_positive_to_covid, upper(s.countryy) as country, s.star_date_month, s.month_end_date
-	from sec s
-	group by s.countryy, s.star_date_month, s.month_end_date
-	order by s.countryy);
-```
-
-Se llama de la siguiente forma:
-```
-select * from tested_positive_to_covid;
-```
-
-y se da de baja:
-```
-drop view tested_positive_to_covid;
-```
-
 ## Problema: Estado actual de los inventario de los hospitales
 
 Sabemos que nuestros recursos no son ilimitados, por lo que los hospitales en situaciones de pandemia pueden llegar a encontrarse en situaciones de escasez en cuanto a ciertos artículos o equipos. Esto nos lleva a pensar que es importante tener presente la disponibilidad de cada artículo en el inventario de cada hospital. De esa forma, se podría saber que zonas o países necesitan recursos para poder seguir dando sus servicios de manera satisfactoria.
@@ -238,4 +163,91 @@ select * protocols_percentage_country;
 y se da de baja:
 ```
 drop view protocols_percentage_country;
+```
+
+## Número de staff médico y parámedico
+
+De la misma forma que no tenemos un inventario ilimitado, en épocas de pandemia, el staff de un hospital no va a poder atender a todas las personas al mismo tiempo. Se ve a tener una disponibilidad limitada mientras más lleno se encuentre el hospital. Eso nos lleva a preguntarnos cuántos doctores y cuántos paramédicos se tienen en ciertas regiones.
+
+### Staff por país (Vista 6)
+
+La cantidad de personal médico por país es un índice importante a tomar en cuenta, en especial, porque nos da la idea de cómo es que está el sector de salud en el país. También, nos comparte la información, de cuantos personal médico hay para atender todos los casos de COVID-19 y con eso, poder corroborar, si el sistema de salud está colapsado o no. Con esa información, doctores de otros países pueden ser enviados como ayuda a los más necesitados.  
+
+### Staff por provincia (Vista 7)
+
+Al igual que analizamos los doctores por país, es importante analizar las provincias. Tanto entre países, como dentro de ellos, en sus provincias, va a existir una heterogeniedad que tenemos que tomar en cuenta. Ciertas áreas de un país pueden estar en peor situación que otras, y esto es importante saberlo
+
+## Vista 3: Recuperados de COVID
+
+La cantidad de recuperados es un dato clave, para así poder conocer el estado actual del país ante los infectados. Con esta información, se puede conocer la tasa de reacción de los pacientes ante la enfermedad. Además, de poder observar cómo es el proceso de recuperación, su tiempo y su efectividad.
+
+La vista nos muestra la cantidad de pacientes, los cuales se recuperaron del COVID-19, organizándolo por mes y por país. Es decir, la vista nos va a proporcionar país, cantidad de recuperados y fecha en la que se registraron estos datos. De igual forma queremos saber el estado actual del inventario, por lo que se toma la última actualización.
+
+La vista se crea de la manera siguiente:
+```
+create view recovered_by_covid as(
+with recovered_by_covid as (
+	select id_hospital as id_hosp, country as countrys from hospital
+	order by country asc
+), sec as(
+	select ps.amount_last_month_recovered_from_covid as count_cases, rc.id_hosp as id, lower(rc.countrys) as countryy,
+	ps.last_update - extract(day from ps.last_update)*'1 day'::interval + '1 day'::interval as star_date_month, 
+	ps.last_update - extract(day from ps.last_update)*'1 day'::interval + '1 day'::interval + 30*'1 day':: interval as month_end_date,
+	extract(month from ps.last_update)
+	from recovered_by_covid rc 
+	join patient_statistics ps on (rc.id_hosp = ps.id_hospital)
+	window w as (partition by extract(month from ps.last_update), lower(rc.countrys) order by rc.countrys)
+	order by rc.countrys asc 
+)
+	select sum(s.count_cases) as recovered_by_covid, upper(s.countryy) as country, s.star_date_month, s.month_end_date
+	from sec s
+	group by s.countryy, s.star_date_month, s.month_end_date
+	order by s.countryy);
+```
+
+Se llama de la siguiente forma:
+```
+select * from recovered_by_covid;
+```
+
+y se da de baja:
+```
+drop view recovered_by_covid;
+```
+
+## Vista 4:
+
+Es muy importante conocer la cantidad de pacientes a los que se les ha detectado el virus, a través de los meses, esto es para así poder conocer la reincidencia que las personas tienen en el país. A mayor casos detectados, mayor reincidencia en el país, o por el contrario, si en el estudio de los meses se detecta menos casos cada mes, entonces, menor reincidencia. 
+
+La vista nos muestra la cantidad de pacientes, a los cuales se les detectó el COVID-19, organizándolo por mes y por país. Es decir, la vista nos va a proporcionar país, cantidad de testeados positivos y fecha en la que se registraron estos datos.
+
+```
+create view tested_positive_to_covid as(
+with tested_positive_to_covid as (
+	select id_hospital as id_hosp, country as countrys from hospital
+	order by country asc
+), sec as(
+	select ps.amount_last_month_tested_positive_covid as count_cases, tc.id_hosp as id, lower(tc.countrys) as countryy,
+	ps.last_update - extract(day from ps.last_update)*'1 day'::interval + '1 day'::interval as star_date_month, 
+	ps.last_update - extract(day from ps.last_update)*'1 day'::interval + '1 day'::interval + 30*'1 day':: interval as month_end_date,
+	extract(month from ps.last_update)
+	from tested_positive_to_covid tc 
+	join patient_statistics ps on (tc.id_hosp = ps.id_hospital)
+	window w as (partition by extract(month from ps.last_update), lower(tc.countrys) order by tc.countrys)
+	order by tc.countrys asc 
+)
+	select sum(s.count_cases) as tested_positive_to_covid, upper(s.countryy) as country, s.star_date_month, s.month_end_date
+	from sec s
+	group by s.countryy, s.star_date_month, s.month_end_date
+	order by s.countryy);
+```
+
+Se llama de la siguiente forma:
+```
+select * from tested_positive_to_covid;
+```
+
+y se da de baja:
+```
+drop view tested_positive_to_covid;
 ```
