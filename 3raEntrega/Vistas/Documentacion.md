@@ -91,12 +91,12 @@ create view needs_by_country as (
 	with last_updates as(
 		select i2.id_hospital, max(i2.last_update) as max_update from inventory i2
 		group by i2.id_hospital order by i2.id_hospital asc)
-	select h.country, avg(i.oxygen) as avg_oxygen, avg(i.antypiretic) as avg_antypiretic, avg(i.anesthesia) as avg_anesthesia, avg(i.soap_alcohol_solution) as avg_soap_alcohol, 
+	select lower(h.country), avg(i.oxygen) as avg_oxygen, avg(i.antypiretic) as avg_antypiretic, avg(i.anesthesia) as avg_anesthesia, avg(i.soap_alcohol_solution) as avg_soap_alcohol, 
 	avg(i.disposable_masks) as avg_disposable_masks, avg(i.disposable_gloves) as avg_disposable_gloves, avg(i.disposable_hats) as avg_disposable_hats, avg(i.disposable_aprons) as avg_disposable_aprons, avg(i.surgical_gloves) as avg_surgical_gloves, 
 	avg(i.shoe_covers) as avg_shoe_covers, avg(i.visors) as avg_visors, avg(i.covid_test_kits) as avg_covid_test_kits
 	from hospital h join inventory i using (id_hospital) join last_updates lu using (id_hospital)
 	where i.last_update = lu.max_update
-	group by h.country order by h.country asc);
+	group by lower(h.country) order by lower(h.country) asc);
 ```
 
 Se llama de la siguiente forma:
@@ -119,12 +119,12 @@ create view needs_by_province as (
 	with last_updates as(
 		select i2.id_hospital, max(i2.last_update) as max_update from inventory i2
 		group by i2.id_hospital order by i2.id_hospital asc)
-	select h.province, h.country , avg(i.oxygen) as avg_oxygen, avg(i.antypiretic) as avg_antypiretic, avg(i.anesthesia) as avg_anesthesia, avg(i.soap_alcohol_solution) as avg_soap_alcohol, 
+	select lower(h.province), lower(h.country) , avg(i.oxygen) as avg_oxygen, avg(i.antypiretic) as avg_antypiretic, avg(i.anesthesia) as avg_anesthesia, avg(i.soap_alcohol_solution) as avg_soap_alcohol, 
 	avg(i.disposable_masks) as avg_disposable_masks, avg(i.disposable_gloves) as avg_disposable_gloves, avg(i.disposable_hats) as avg_disposable_hats, avg(i.disposable_aprons) as avg_disposable_aprons, avg(i.surgical_gloves) as avg_surgical_gloves, 
 	avg(i.shoe_covers) as avg_shoe_covers, avg(i.visors) as avg_visors, avg(i.covid_test_kits) as avg_covid_test_kits
 	from hospital h join inventory i using (id_hospital) join last_updates lu using (id_hospital)
 	where i.last_update = lu.max_update
-	group by h.province, h.country order by h.country, h.province asc);
+	group by lower(h.province), lower(h.country) order by lower(h.country), lower(h.province) asc);
 ```
 
 Se llama de la siguiente forma:
@@ -147,12 +147,12 @@ create view needs_by_hospital as (
 	with last_updates as(
 		select i2.id_hospital, extract(year from i2.last_update) as año, extract(month from i2.last_update) as mes, max(i2.last_update)  as max_update from inventory i2
 		group by i2.id_hospital, extract(year from i2.last_update), extract(month from i2.last_update) order by i2.id_hospital asc)
-	select h.name_hospital, h.country, avg(i.oxygen) as avg_oxygen, avg(i.antypiretic) as avg_antypiretic, avg(i.anesthesia) as avg_anesthesia, avg(i.soap_alcohol_solution) as avg_soap_alcohol, 
+	select h.name_hospital, lower(h.country), avg(i.oxygen) as avg_oxygen, avg(i.antypiretic) as avg_antypiretic, avg(i.anesthesia) as avg_anesthesia, avg(i.soap_alcohol_solution) as avg_soap_alcohol, 
 	avg(i.disposable_masks) as avg_disposable_masks, avg(i.disposable_gloves) as avg_disposable_gloves, avg(i.disposable_hats) as avg_disposable_hats, avg(i.disposable_aprons) as avg_disposable_aprons, avg(i.surgical_gloves) as avg_surgical_gloves, 
 	avg(i.shoe_covers) as avg_shoe_covers, avg(i.visors) as avg_visors, avg(i.covid_test_kits) as avg_covid_test_kits
 	from hospital h join inventory i using (id_hospital) join last_updates lu using (id_hospital)
 	where i.last_update = lu.max_update
-	group by h.name_hospital, h.country order by h.country, h.name_hospital asc);
+	group by h.name_hospital, lower(h.country) order by lower(h.country), h.name_hospital asc);
 ```
 
 Se llama de la siguiente forma:
@@ -177,16 +177,16 @@ La vista nos muestra los hospitales que tengan las medidas previamente mencionad
 
 La vista se crea de la manera siguiente:
 ```
-create view hosp_graves as
+create view hosp_graves as (
 	with hosp_protocol_last_update as (
 		select h2.id_hospital, max(cp2.last_update) as protocol_max_update from hospital h2 join covid_protocol cp2 using (id_hospital)
 		group by h2.id_hospital order by h2.id_hospital asc)
-    select h.id_hospital, h.name_hospital, h.country, p.p_name, p.phone, p.mail, cp.last_update as protocol_last_update
+    select h.id_hospital, h.name_hospital, lower(h.country), p.p_name, p.phone, p.mail, cp.last_update as protocol_last_update
     from hospital h join hosp_protocol_last_update hp using (id_hospital) 
    	join covid_protocol cp using (id_hospital)
    	join contact c2 using (id_hospital) join person p using (id_contact)
     where screen_covid_patients = false and preventions_campaigns = false  and currently_ability_for_tests = false and track_regularly_cases = false
-   	and cp.last_update = hp.protocol_max_update order by h.id_hospital asc;
+   	and cp.last_update = hp.protocol_max_update order by h.id_hospital asc);
 ```
 
 Se llama de la siguiente forma:
@@ -198,3 +198,7 @@ y se da de baja:
 ```
 drop view hosp_graves;
 ```
+
+### Porcentajes de medidas adoptadas por país (Vista 5)
+
+
