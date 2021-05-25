@@ -1,35 +1,5 @@
 # Documentación de vistas
 
-## Vista 1: Hospitales sin protocolos
-
-Ante la situación actual, es importante que los hospitales se encuentren preparados no solo para tratar sino para evitar o controlar de cierta forma este virus. Para eso se han implementado técnicas y medidas que buscan cumplir con esos objetivos. Por esa razón, es importante saber los hospitales que aún no tienen estas medidas y hacer planes para hacerlas llegar a ellos lo más pronto posible.
-
-La vista nos muestra hospitales en situación grave frente a la pandemia, ya que no tiene implementadas: campañas de prevención, capacidad de hacer pruebas, un seguimiento regular de casos de COVID y cribas de pacientes. Por lo mismo tendrán todos estos atributos booleanos marcados como falso. Nos mostrará el nombre, país, nombre del contacto, teléfono y correo de los hospitales que se encuentren en esta situación. De la tabla de protocolos solo tomará en cuenta la última actualización recibida.
-
-La vista se crea de la manera siguiente:
-```
-create view hosp_graves as
-	with hosp_protocol_last_update as (
-		select h2.id_hospital, max(cp2.last_update) as protocol_max_update from hospital h2 join covid_protocol cp2 using (id_hospital)
-		group by h2.id_hospital order by h2.id_hospital asc)
-    select h.id_hospital, h.name_hospital, h.country, p.p_name, p.phone, p.mail, cp.last_update as protocol_last_update
-    from hospital h join hosp_protocol_last_update hp using (id_hospital) 
-   	join covid_protocol cp using (id_hospital)
-   	join contact c2 using (id_hospital) join person p using (id_contact)
-    where screen_covid_patients = false and preventions_campaigns = false  and currently_ability_for_tests = false and track_regularly_cases = false
-   	and cp.last_update = hp.protocol_max_update order by h.id_hospital asc;
-```
-
-Se llama de la siguiente forma:
-```
-select * from hosp_graves;
-```
-
-y se da de baja:
-```
-drop view hosp_graves;
-```
-
 ## Vista 3: Recuperados de COVID
 
 La cantidad de recuperados es un dato clave, para así poder conocer el estado actual del país ante los infectados. Con esta información, se puede conocer la tasa de reacción de los pacientes ante la enfermedad. Además, de poder observar cómo es el proceso de recuperación, su tiempo y su efectividad.
@@ -111,7 +81,7 @@ Sabemos que nuestros recursos no son ilimitados, por lo que los hospitales en si
 
 Para eso es necesario conocer el promedio de dias disponibles para cada uno de los artículos necesarios para el correcto funcionamiento. Esto es necesario hacerlo a nivel país y provincia con los promedios de los hospitales en cada región. Además tampoco está de más saber en promedio cómo se encuentra cada hospital individualmente, ya que nos indicará como ha estado trabajando ese hospital mes por mes.
 
-### Promedio de inventario por país
+### Promedio de inventario por país (Vista 1)
 
 La vista primero obtiene las última actualización de inventario de cada hospital individualmente. Despúes trabaja con los inventarios (verificando igualdad de fechas) de esa fecha para obtener el promedio de cada uno de los artículos agrupándolos por el país y ordenándolos alfabéticamente.
 
@@ -139,7 +109,7 @@ y se da de baja:
 drop view needs_by_country;
 ```
 
-### Promedio de inventario por provincia
+### Promedio de inventario por provincia (Vista 2)
 
 La vista sigue el mismo procedimiento que la de país, sin embargo, ahora el criterio de agrupación usado para los promedios es el de provincia. También se decidió seguir mostrando el país, ya que es bueno saber a donde pertenece cada provincia
 
@@ -167,7 +137,7 @@ y se da de baja:
 drop view needs_by_province;
 ```
 
-### Promedio de inventario por hospital
+### Promedio de inventario por hospital (Vista 3)
 
 Para está vista se cambio la dinámica previamente usada. Aquí queremos ver en promedio como ha estado trabajando el hospital según las actualizaciones recibidas mes por mes. Por esa razón, queremos obtener la última actualización de cada mes por hospital y de ahí obtener el promedio de cada uno. Además, es importante considerar agrupar por año, ya que en un futuro, con mayores waves, se empezarán a repetir los meses.
 
@@ -193,4 +163,38 @@ select * from needs_by_hospital;
 y se da de baja:
 ```
 drop view needs_by_hospital;
+```
+
+## Problema: Implementación de protocolos COVID
+
+Ante la situación actual, es importante que los hospitales se encuentren preparados no solo para tratar sino para evitar o controlar de cierta forma este virus. Para eso se han implementado técnicas y medidas que buscan cumplir con esos objetivos. Por esa razón, es importante saber los hospitales que aún no tienen estas medidas y hacer planes para hacerlas llegar a ellos lo más pronto posible. Este análiis puede ser muy variado, ya que se puede analizar que tengan todos los puntos, solo unos cuantos o realizarle operaciones estadísticas a los datos. Nosotros nos centraremos en las siguientes:
+
+### Hospitales en situación de "gran riesgo" (Vista 4)
+
+Nosotros consideramos que los hospitales están en gran riesgo si no han implementado ninguna de las medidas siguientes: campañas de prevención, capacidad de hacer pruebas, seguimiento regular a casos COVID y cribas de pacientes. Estos atributos, en general, muestran la preparación del hospital frente a la pandemia. Sin embargo, los criterios pueden cambiar y se puede considerar una situación de grave riesgo ante la falta de algún requisito, no todos necesariamente. Por eso, es fácil de editar para satisfacer los criterios propios. Teniendo esta información se pueden asistir a los hospitales correspondientes en su implementación.
+
+La vista nos muestra los hospitales que tengan las medidas previamente mencionadas, las cuales son atributos booleanos, marcados como falso. Nos mostrará el nombre, país, nombre del contacto, teléfono y correo de los hospitales que se encuentren en esta situación. De la tabla de protocolos solo tomará en cuenta la última actualización recibida.
+
+La vista se crea de la manera siguiente:
+```
+create view hosp_graves as
+	with hosp_protocol_last_update as (
+		select h2.id_hospital, max(cp2.last_update) as protocol_max_update from hospital h2 join covid_protocol cp2 using (id_hospital)
+		group by h2.id_hospital order by h2.id_hospital asc)
+    select h.id_hospital, h.name_hospital, h.country, p.p_name, p.phone, p.mail, cp.last_update as protocol_last_update
+    from hospital h join hosp_protocol_last_update hp using (id_hospital) 
+   	join covid_protocol cp using (id_hospital)
+   	join contact c2 using (id_hospital) join person p using (id_contact)
+    where screen_covid_patients = false and preventions_campaigns = false  and currently_ability_for_tests = false and track_regularly_cases = false
+   	and cp.last_update = hp.protocol_max_update order by h.id_hospital asc;
+```
+
+Se llama de la siguiente forma:
+```
+select * from hosp_graves;
+```
+
+y se da de baja:
+```
+drop view hosp_graves;
 ```
