@@ -4,16 +4,20 @@
 
 Ante la situación actual, es importante que los hospitales se encuentren preparados no solo para tratar sino para evitar o controlar de cierta forma este virus. Para eso se han implementado técnicas y medidas que buscan cumplir con esos objetivos. Por esa razón, es importante saber los hospitales que aún no tienen estas medidas y hacer planes para hacerlas llegar a ellos lo más pronto posible.
 
-La vista nos muestra hospitales en situación grave frente a la pandemia, ya que no tiene implementadas: campañas de prevención, capacidad de hacer pruebas, un seguimiento regular de casos de COVID y cribas de pacientes. Por lo mismo tendrán todos estos atributos booleanos marcados como falso. Nos mostrará el nombre, país, nombre del contacto, teléfono y correo de los hospitales que se encuentren en esta situación.
+La vista nos muestra hospitales en situación grave frente a la pandemia, ya que no tiene implementadas: campañas de prevención, capacidad de hacer pruebas, un seguimiento regular de casos de COVID y cribas de pacientes. Por lo mismo tendrán todos estos atributos booleanos marcados como falso. Nos mostrará el nombre, país, nombre del contacto, teléfono y correo de los hospitales que se encuentren en esta situación. De la tabla de protocolos solo tomará en cuenta la última actualización recibida.
 
 La vista se crea de la manera siguiente:
 ```
 create view hosp_graves as
-    select name_hospital, country, p_name, phone, mail
-    from hospital  
-   	 join covid_protocol cp using (id_hospital)
-   	 join contact c2 using (id_hospital) join person p using (id_contact)
-    where screen_covid_patients = false and preventions_campaigns = false  and currently_ability_for_tests = false and track_regularly_cases =false;
+	with hosp_protocol_last_update as (
+		select h2.id_hospital, max(cp2.last_update) as protocol_max_update from hospital h2 join covid_protocol cp2 using (id_hospital)
+		group by h2.id_hospital order by h2.id_hospital asc)
+    select h.id_hospital, h.name_hospital, h.country, p.p_name, p.phone, p.mail, cp.last_update as protocol_last_update
+    from hospital h join hosp_protocol_last_update hp using (id_hospital) 
+   	join covid_protocol cp using (id_hospital)
+   	join contact c2 using (id_hospital) join person p using (id_contact)
+    where screen_covid_patients = false and preventions_campaigns = false  and currently_ability_for_tests = false and track_regularly_cases = false
+   	and cp.last_update = hp.protocol_max_update order by h.id_hospital asc;
 ```
 
 Se llama de la siguiente forma:
@@ -35,10 +39,13 @@ La vista nos muestra el inventario (en otras palabras, sus atributos) de todos l
 La vista se crea de la manera siguiente:
 ```
 create view inventario_Kenya as
-select name_hospital, h.district , h.province, oxygen, antypiretic, anesthesia, soap_alcohol_solution, disposable_masks, disposable_gloves, disposable_hats, disposable_aprons, surgical_gloves, shoe_covers, visors, covid_test_kits, h.last_update as ultima_actualizacion
-from hospital h
+	with hosp_inventory_last_update as (
+		select h2.id_hospital, max(i2.last_update) as inventory_max_update from hospital h2 join inventory i2 using (id_hospital)
+		group by h2.id_hospital order by h2.id_hospital asc)
+	select h.id_hospital, h.name_hospital, h.district , h.province, i.oxygen, i.antypiretic, i.anesthesia, i.soap_alcohol_solution, i.disposable_masks, i.disposable_gloves, i.disposable_hats, i.disposable_aprons, i.surgical_gloves, i.shoe_covers, i.visors, i.covid_test_kits, i.last_update as ultima_actualizacion
+	from hospital h join hosp_inventory_last_update hi using (id_hospital)
     join inventory i using (id_hospital)
-where lower(country)='kenya';
+	where lower(country)='kenya' and i.last_update = hi.inventory_max_update order by h.id_hospital asc;
 ```
 
 Se llama de la siguiente forma:
@@ -55,7 +62,7 @@ drop view inventario_Kenya;
 
 La cantidad de recuperados es un dato clave, para así poder conocer el estado actual del país ante los infectados. Con esta información, se puede conocer la tasa de reacción de los pacientes ante la enfermedad. Además, de poder observar cómo es el proceso de recuperación, su tiempo y su efectividad.
 
-La vista nos muestra la cantidad de pacientes, los cuales se recuperaron del COVID-19, organizándolo por mes y por país. Es decir, la vista nos va a proporcionar país, cantidad de recuperados y fecha en la que se registraron estos datos.
+La vista nos muestra la cantidad de pacientes, los cuales se recuperaron del COVID-19, organizándolo por mes y por país. Es decir, la vista nos va a proporcionar país, cantidad de recuperados y fecha en la que se registraron estos datos. De igual forma queremos saber el estado actual del inventario, por lo que se toma la última actualización.
 
 La vista se crea de la manera siguiente:
 ```
