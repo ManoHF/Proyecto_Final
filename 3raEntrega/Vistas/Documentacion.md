@@ -30,34 +30,6 @@ y se da de baja:
 drop view hosp_graves;
 ```
 
-## Vista 2: Inventarios por hospital
-
-Sabemos que nuestros recursos no son ilimitados, por lo que los hospitales en situaciones de pandemia pueden llegar a encontrarse en situaciones de escasez en cuanto a ciertos artículos o equipos. Esto nos lleva a pensar que es importante tener presente la disponibilidad de cada artículo en el inventario de cada hospital. De esa forma, se podría saber que zonas o países necesitan recursos para poder seguir dando sus servicios de manera satisfactoria.
-
-La vista nos muestra el inventario (en otras palabras, sus atributos) de todos los hospitales de Kenya (lógicamente se puede aplicar a cualquier país). Se muestra el nombre del hospital, provincia, distrito, todos los materiales con sus cantidades, y la fecha de su última actualización.
-
-La vista se crea de la manera siguiente:
-```
-create view inventario_Kenya as
-	with hosp_inventory_last_update as (
-		select h2.id_hospital, max(i2.last_update) as inventory_max_update from hospital h2 join inventory i2 using (id_hospital)
-		group by h2.id_hospital order by h2.id_hospital asc)
-	select h.id_hospital, h.name_hospital, h.district , h.province, i.oxygen, i.antypiretic, i.anesthesia, i.soap_alcohol_solution, i.disposable_masks, i.disposable_gloves, i.disposable_hats, i.disposable_aprons, i.surgical_gloves, i.shoe_covers, i.visors, i.covid_test_kits, i.last_update as ultima_actualizacion
-	from hospital h join hosp_inventory_last_update hi using (id_hospital)
-    join inventory i using (id_hospital)
-	where lower(country)='kenya' and i.last_update = hi.inventory_max_update order by h.id_hospital asc;
-```
-
-Se llama de la siguiente forma:
-```
-select * from inventario_Kenya;
-```
-
-y se da de baja:
-```
-drop view inventario_Kenya;
-```
-
 ## Vista 3: Recuperados de COVID
 
 La cantidad de recuperados es un dato clave, para así poder conocer el estado actual del país ante los infectados. Con esta información, se puede conocer la tasa de reacción de los pacientes ante la enfermedad. Además, de poder observar cómo es el proceso de recuperación, su tiempo y su efectividad.
@@ -133,4 +105,92 @@ y se da de baja:
 drop view tested_positive_to_covid;
 ```
 
-## Vista N:
+## Problema: Estado actual de los inventario de los hospitales
+
+Sabemos que nuestros recursos no son ilimitados, por lo que los hospitales en situaciones de pandemia pueden llegar a encontrarse en situaciones de escasez en cuanto a ciertos artículos o equipos. Esto nos lleva a pensar que es importante tener presente la disponibilidad de cada artículo en el inventario de cada hospital. De esa forma, se podría saber que zonas o países necesitan recursos para poder seguir dando sus servicios de manera satisfactoria.
+
+Para eso es necesario conocer el promedio de dias disponibles para cada uno de los artículos necesarios para el correcto funcionamiento. Esto es necesario hacerlo a nivel país y provincia con los promedios de los hospitales en cada región. Además tampoco está de más saber en promedio cómo se encuentra cada hospital individualmente, ya que nos indicará como ha estado trabajando ese hospital mes por mes.
+
+### Promedio de inventario por país
+
+La vista primero obtiene las última actualización de inventario de cada hospital individualmente. Despúes trabaja con los inventarios (verificando igualdad de fechas) de esa fecha para obtener el promedio de cada uno de los artículos agrupándolos por el país y ordenándolos alfabéticamente.
+
+La vista se crea de la manera siguiente:
+```
+create view needs_by_country as (
+	with last_updates as(
+		select i2.id_hospital, max(i2.last_update) as max_update from inventory i2
+		group by i2.id_hospital order by i2.id_hospital asc)
+	select h.country, avg(i.oxygen) as avg_oxygen, avg(i.antypiretic) as avg_antypiretic, avg(i.anesthesia) as avg_anesthesia, avg(i.soap_alcohol_solution) as avg_soap_alcohol, 
+	avg(i.disposable_masks) as avg_disposable_masks, avg(i.disposable_gloves) as avg_disposable_gloves, avg(i.disposable_hats) as avg_disposable_hats, avg(i.disposable_aprons) as avg_disposable_aprons, avg(i.surgical_gloves) as avg_surgical_gloves, 
+	avg(i.shoe_covers) as avg_shoe_covers, avg(i.visors) as avg_visors, avg(i.covid_test_kits) as avg_covid_test_kits
+	from hospital h join inventory i using (id_hospital) join last_updates lu using (id_hospital)
+	where i.last_update = lu.max_update
+	group by h.country order by h.country asc);
+```
+
+Se llama de la siguiente forma:
+```
+select * from needs_by_country;
+```
+
+y se da de baja:
+```
+drop view needs_by_country;
+```
+
+### Promedio de inventario por provincia
+
+La vista sigue el mismo procedimiento que la de país, sin embargo, ahora el criterio de agrupación usado para los promedios es el de provincia. También se decidió seguir mostrando el país, ya que es bueno saber a donde pertenece cada provincia
+
+La vista se crea de la manera siguiente:
+```
+create view needs_by_province as (
+	with last_updates as(
+		select i2.id_hospital, max(i2.last_update) as max_update from inventory i2
+		group by i2.id_hospital order by i2.id_hospital asc)
+	select h.province, h.country , avg(i.oxygen) as avg_oxygen, avg(i.antypiretic) as avg_antypiretic, avg(i.anesthesia) as avg_anesthesia, avg(i.soap_alcohol_solution) as avg_soap_alcohol, 
+	avg(i.disposable_masks) as avg_disposable_masks, avg(i.disposable_gloves) as avg_disposable_gloves, avg(i.disposable_hats) as avg_disposable_hats, avg(i.disposable_aprons) as avg_disposable_aprons, avg(i.surgical_gloves) as avg_surgical_gloves, 
+	avg(i.shoe_covers) as avg_shoe_covers, avg(i.visors) as avg_visors, avg(i.covid_test_kits) as avg_covid_test_kits
+	from hospital h join inventory i using (id_hospital) join last_updates lu using (id_hospital)
+	where i.last_update = lu.max_update
+	group by h.province, h.country order by h.country, h.province asc);
+```
+
+Se llama de la siguiente forma:
+```
+select * from needs_by_province;
+```
+
+y se da de baja:
+```
+drop view needs_by_province;
+```
+
+### Promedio de inventario por hospital
+
+Para está vista se cambio la dinámica previamente usada. Aquí queremos ver en promedio como ha estado trabajando el hospital según las actualizaciones recibidas mes por mes. Por esa razón, queremos obtener la última actualización de cada mes por hospital y de ahí obtener el promedio de cada uno. Además, es importante considerar agrupar por año, ya que en un futuro, con mayores waves, se empezarán a repetir los meses.
+
+La vista se crea de la manera siguiente:
+```
+create view needs_by_hospital as (
+	with last_updates as(
+		select i2.id_hospital, extract(year from i2.last_update) as año, extract(month from i2.last_update) as mes, max(i2.last_update)  as max_update from inventory i2
+		group by i2.id_hospital, extract(year from i2.last_update), extract(month from i2.last_update) order by i2.id_hospital asc)
+	select h.name_hospital, h.country, avg(i.oxygen) as avg_oxygen, avg(i.antypiretic) as avg_antypiretic, avg(i.anesthesia) as avg_anesthesia, avg(i.soap_alcohol_solution) as avg_soap_alcohol, 
+	avg(i.disposable_masks) as avg_disposable_masks, avg(i.disposable_gloves) as avg_disposable_gloves, avg(i.disposable_hats) as avg_disposable_hats, avg(i.disposable_aprons) as avg_disposable_aprons, avg(i.surgical_gloves) as avg_surgical_gloves, 
+	avg(i.shoe_covers) as avg_shoe_covers, avg(i.visors) as avg_visors, avg(i.covid_test_kits) as avg_covid_test_kits
+	from hospital h join inventory i using (id_hospital) join last_updates lu using (id_hospital)
+	where i.last_update = lu.max_update
+	group by h.name_hospital, h.country order by h.country, h.name_hospital asc);
+```
+
+Se llama de la siguiente forma:
+```
+select * from needs_by_hospital;
+```
+
+y se da de baja:
+```
+drop view needs_by_hospital;
+```
