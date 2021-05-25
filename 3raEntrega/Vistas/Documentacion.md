@@ -201,4 +201,41 @@ drop view hosp_graves;
 
 ### Porcentajes de medidas adoptadas por país (Vista 5)
 
+De la misma forma resulta útil ver, por cada país, el porcentaje de implementación de cada una de las medidas o protocolos. De esa forma podríamos ver que necesita cada país y si se necesitan nuevas estrategias para hacer llegar ciertas medidas dada la particular situación de cada uno.
 
+La vista como las demás obtiene las últimas actualizaciones que son las que realmente cuentan. Posteriormente realiza un conteo por cada medida si está tiene un valor verdadero. Para finalizar obtiene los porcentajes de cada una dividiendolo por el conteo sin ninguna condición y multiplicándolo por cien. Nos muestra el país con sus respectivos porcentajes en cada uno de los aspectos.
+
+La vista se crea de la manera siguiente:
+```
+create view protocols_percentage_country as (
+	with hosp_protocol_last_update as (
+		select h2.id_hospital, h2.country, max(cp2.last_update) as protocol_max_update from hospital h2 join covid_protocol cp2 using (id_hospital)
+		group by h2.id_hospital order by h2.id_hospital asc)
+	, counts_yes_country as (
+		select lower(hp.country) as country, count(case when cp3.currently_ability_for_tests = true then 1 else null end) as count_test_y, 
+		count(case when cp3.preventions_campaigns = true then 1 else null end) as count_camp_y,
+		count(case when cp3.screen_covid_patients = true then 1 else null end) as count_screen_y, 
+		count(case when cp3.track_regularly_cases = true then 1 else null end) as count_track_y
+		from covid_protocol cp3 join hosp_protocol_last_update hp using (id_hospital) 
+		where cp3.last_update = hp.protocol_max_update
+		group by lower(hp.country) order by lower(hp.country) asc)
+	, counts_country as (
+		select lower(hp.country) as country, count(cp4.currently_ability_for_tests) as count_test, count(cp4.preventions_campaigns) as count_camp,
+		count(cp4.screen_covid_patients) as count_screen, count(cp4.track_regularly_cases) as count_track
+		from covid_protocol cp4 join hosp_protocol_last_update hp using (id_hospital) 
+		where cp4.last_update = hp.protocol_max_update
+		group by lower(hp.country) order by lower(hp.country) asc)
+   select cy.country, (cy.count_test_y * 100)/cc.count_test as percentage_tests, (cy.count_camp_y * 100)/cc.count_camp as percentage_campaigns,
+   (cy.count_screen_y * 100)/cc.count_screen as percentage_screen, (cy.count_track_y * 100)/cc.count_track as percentage_tracking
+   from counts_yes_country cy join counts_country cc using (country));
+```
+
+Se llama de la siguiente forma:
+```
+select * protocols_percentage_country;
+```
+
+y se da de baja:
+```
+drop view protocols_percentage_country;
+```
