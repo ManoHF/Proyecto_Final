@@ -225,7 +225,7 @@ drop view staff_by_province;
 
 ### Estadísticas COVID por país y por provincia (Vista 8)
 
-Como algo básico en estos momentos es importante tener en números los positivos, las muertes y los pacientes en cuidados intersivos por covid. La vista siguiente nos muestra estos datos: primero por provincia, después los suma y nos muestra los totales por país
+Como algo básico en estos momentos es importante tener en números los positivos, las muertes y los pacientes en cuidados intersivos por covid. La vista siguiente nos muestra estos datos: primero por provincia, después los suma y nos muestra los totales por país.
 
 La vista se crea de la manera siguiente:
 ```
@@ -249,4 +249,66 @@ select * from covid_stats;
 y se da de baja:
 ```
 drop view covid_stats;
+```
+
+### Comparación entre muertes COVID y no COVID por país (Vista 9)
+
+Uno se podría plantear que tantas muertes ha generado el COVID en comparación con muertes no relacionadas a este virus. Con base en eso podemos ver durante esta época que tan grave ha afectado este virus al país.
+
+La vista se crea de la manera siguiente:
+```
+create view deaths_stats_country as(
+with last_updates as(
+		select ps.id_hospital, extract(year from ps.last_update) as año, extract(month from ps.last_update) as mes,
+		max(ps.last_update) as max_update from patient_statistics ps
+		group by ps.id_hospital, extract(year from ps.last_update), extract(month from ps.last_update)
+		order by ps.id_hospital asc
+		)
+	select lower(h.country), lu.año as years, lu.mes as months, sum(ps.amount_last_month_deaths_by_covid) as number_of_deaths_by_covid,
+	sum(ps.amount_last_month_deaths_non_covid) as number_of_deaths_non_covid, (sum(ps.amount_last_month_deaths_by_covid) - sum(ps.amount_last_month_deaths_non_covid)) as diference
+	from hospital h join patient_statistics ps using (id_hospital) join last_updates lu using (id_hospital)
+	where ps.last_update = lu.max_update
+	group by lower(h.country), lu.año, lu.mes order by lower(h.country) asc);
+```
+
+Se llama de la siguiente forma:
+```
+select * from deaths_stats_country;
+```
+
+y se da de baja:
+```
+drop view deaths_stats_country;
+```
+
+### Comparación entre muertes COVID y no COVID por país (Vista 10)
+
+Como se ha venido haciendo, pasamos a comparar las muertes COVID y no COVID ahora por provincia. Sin embargo, en esta vista, en lugar de obtener la diferencia entre el número de muertes, obtenemos el porcentaje de muertes COVID por provincia.
+
+La vista se crea de la manera siguiente:
+```
+create view deaths_stats_by_province as(
+with last_updates as(
+		select ps.id_hospital, extract(year from ps.last_update) as año, extract(month from ps.last_update) as mes,
+		max(ps.last_update) as max_update from patient_statistics ps
+		group by ps.id_hospital, extract(year from ps.last_update), extract(month from ps.last_update)
+		order by ps.id_hospital asc
+		)
+	select lower(h.province),upper(h.country), lu.año as years, lu.mes as months, sum(ps.amount_last_month_deaths_by_covid) as number_of_deaths_by_covid,
+	sum(ps.amount_last_month_deaths_non_covid) as number_of_deaths_non_covid, ((ps.amount_last_month_deaths_by_covid*100)/(ps.amount_last_month_deaths_by_covid+ps.amount_last_month_deaths_non_covid)) 
+	as percentage_of_covid_deaths
+	from hospital h join patient_statistics ps using (id_hospital) join last_updates lu using (id_hospital)
+	where ps.last_update = lu.max_update
+	group by lower(h.province),upper(h.country), lu.año, lu.mes,((ps.amount_last_month_deaths_by_covid*100)/(ps.amount_last_month_deaths_by_covid+ps.amount_last_month_deaths_non_covid)) 
+	order by upper(h.country) asc);
+```
+
+Se llama de la siguiente forma:
+```
+select * from deaths_stats_by_province;
+```
+
+y se da de baja:
+```
+drop view deaths_stats_by_province;
 ```
