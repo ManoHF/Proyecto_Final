@@ -44,12 +44,12 @@ create view needs_by_province as (
 	with last_updates as(
 		select i2.id_hospital, extract(year from i2.last_update) as año, extract(month from i2.last_update) as mes, max(i2.last_update) as max_update from inventory i2
 		group by i2.id_hospital, extract(year from i2.last_update), extract(month from i2.last_update) order by i2.id_hospital asc)
-	select lower(h.province), lower(h.country), lu.año, lu.mes, avg(i.oxygen) as avg_oxygen, avg(i.antypiretic) as avg_antypiretic, avg(i.anesthesia) as avg_anesthesia, avg(i.soap_alcohol_solution) as avg_soap_alcohol, 
+	select lower(h.province), upper(h.country), lu.año, lu.mes, avg(i.oxygen) as avg_oxygen, avg(i.antypiretic) as avg_antypiretic, avg(i.anesthesia) as avg_anesthesia, avg(i.soap_alcohol_solution) as avg_soap_alcohol, 
 	avg(i.disposable_masks) as avg_disposable_masks, avg(i.disposable_gloves) as avg_disposable_gloves, avg(i.disposable_hats) as avg_disposable_hats, avg(i.disposable_aprons) as avg_disposable_aprons, avg(i.surgical_gloves) as avg_surgical_gloves, 
 	avg(i.shoe_covers) as avg_shoe_covers, avg(i.visors) as avg_visors, avg(i.covid_test_kits) as avg_covid_test_kits
 	from hospital h join inventory i using (id_hospital) join last_updates lu using (id_hospital)
 	where i.last_update = lu.max_update
-	group by lower(h.province), lower(h.country), lu.año, lu.mes order by lower(h.country), lower(h.province) asc);
+	group by lower(h.province), upper(h.country), lu.año, lu.mes order by upper(h.country), lower(h.province) asc);
 ```
 
 Se llama de la siguiente forma:
@@ -201,97 +201,26 @@ Al igual que analizamos los doctores por país, es importante analizar las provi
 
 La vista se crea de la manera siguiente:
 ```
-create view staff_by_country as (
-	with last_updates as(
+create view staff_by_province as (
+	with last_updates as (
 		select s2.id_hospital, extract(year from s2.last_update) as año, extract(month from s2.last_update) as mes, max(s2.last_update) as max_update from staff s2
 		group by s2.id_hospital, extract(year from s2.last_update), extract(month from s2.last_update) order by s2.id_hospital asc)
-	select lower(h.province), lower(h.country), lu.año, lu.mes, sum(s.amount_of_doctors_in_hospital) as number_doctors, sum(s.amount_of_paramedical_staff_in_hospital) as number_paramedics
+	select lower(h.province), upper(h.country), lu.año, lu.mes, sum(s.amount_of_doctors_in_hospital) as number_doctors, sum(s.amount_of_paramedical_staff_in_hospital) as number_paramedics
 	from hospital h join staff s using (id_hospital) join last_updates lu using (id_hospital)
 	where s.last_update = lu.max_update
-	group by lower(h.province), lower(h.country), lu.año, lu.mes order by lower(h.country) asc);
+	group by lower(h.province), upper(h.country), lu.año, lu.mes order by upper(h.country) asc);
 ```
 
 Se llama de la siguiente forma:
 ```
-select * from staff_by_country;
+select * from staff_by_province;
 ```
 
 y se da de baja:
 ```
-drop view staff_by_country;
+drop view staff_by_province;
 ```
 
-## Vista 3: Recuperados de COVID
+## Afectación del COVID
 
-La cantidad de recuperados es un dato clave, para así poder conocer el estado actual del país ante los infectados. Con esta información, se puede conocer la tasa de reacción de los pacientes ante la enfermedad. Además, de poder observar cómo es el proceso de recuperación, su tiempo y su efectividad.
-
-La vista nos muestra la cantidad de pacientes, los cuales se recuperaron del COVID-19, organizándolo por mes y por país. Es decir, la vista nos va a proporcionar país, cantidad de recuperados y fecha en la que se registraron estos datos. De igual forma queremos saber el estado actual del inventario, por lo que se toma la última actualización.
-
-La vista se crea de la manera siguiente:
-```
-create view recovered_by_covid as(
-with recovered_by_covid as (
-	select id_hospital as id_hosp, country as countrys from hospital
-	order by country asc
-), sec as(
-	select ps.amount_last_month_recovered_from_covid as count_cases, rc.id_hosp as id, lower(rc.countrys) as countryy,
-	ps.last_update - extract(day from ps.last_update)*'1 day'::interval + '1 day'::interval as star_date_month, 
-	ps.last_update - extract(day from ps.last_update)*'1 day'::interval + '1 day'::interval + 30*'1 day':: interval as month_end_date,
-	extract(month from ps.last_update)
-	from recovered_by_covid rc 
-	join patient_statistics ps on (rc.id_hosp = ps.id_hospital)
-	window w as (partition by extract(month from ps.last_update), lower(rc.countrys) order by rc.countrys)
-	order by rc.countrys asc 
-)
-	select sum(s.count_cases) as recovered_by_covid, upper(s.countryy) as country, s.star_date_month, s.month_end_date
-	from sec s
-	group by s.countryy, s.star_date_month, s.month_end_date
-	order by s.countryy);
-```
-
-Se llama de la siguiente forma:
-```
-select * from recovered_by_covid;
-```
-
-y se da de baja:
-```
-drop view recovered_by_covid;
-```
-
-## Vista 4:
-
-Es muy importante conocer la cantidad de pacientes a los que se les ha detectado el virus, a través de los meses, esto es para así poder conocer la reincidencia que las personas tienen en el país. A mayor casos detectados, mayor reincidencia en el país, o por el contrario, si en el estudio de los meses se detecta menos casos cada mes, entonces, menor reincidencia. 
-
-La vista nos muestra la cantidad de pacientes, a los cuales se les detectó el COVID-19, organizándolo por mes y por país. Es decir, la vista nos va a proporcionar país, cantidad de testeados positivos y fecha en la que se registraron estos datos.
-
-```
-create view tested_positive_to_covid as(
-with tested_positive_to_covid as (
-	select id_hospital as id_hosp, country as countrys from hospital
-	order by country asc
-), sec as(
-	select ps.amount_last_month_tested_positive_covid as count_cases, tc.id_hosp as id, lower(tc.countrys) as countryy,
-	ps.last_update - extract(day from ps.last_update)*'1 day'::interval + '1 day'::interval as star_date_month, 
-	ps.last_update - extract(day from ps.last_update)*'1 day'::interval + '1 day'::interval + 30*'1 day':: interval as month_end_date,
-	extract(month from ps.last_update)
-	from tested_positive_to_covid tc 
-	join patient_statistics ps on (tc.id_hosp = ps.id_hospital)
-	window w as (partition by extract(month from ps.last_update), lower(tc.countrys) order by tc.countrys)
-	order by tc.countrys asc 
-)
-	select sum(s.count_cases) as tested_positive_to_covid, upper(s.countryy) as country, s.star_date_month, s.month_end_date
-	from sec s
-	group by s.countryy, s.star_date_month, s.month_end_date
-	order by s.countryy);
-```
-
-Se llama de la siguiente forma:
-```
-select * from tested_positive_to_covid;
-```
-
-y se da de baja:
-```
-drop view tested_positive_to_covid;
-```
+### Número de positivos por país y por provincia
