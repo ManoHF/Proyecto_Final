@@ -223,4 +223,30 @@ drop view staff_by_province;
 
 ## Afectación del COVID
 
-### Número de positivos por país y por provincia
+### Estadísticas COVID por país y por provincia (Vista 8)
+
+Como algo básico en estos momentos es importante tener en números los positivos, las muertes y los pacientes en cuidados intersivos por covid. La vista siguiente nos muestra estos datos: primero por provincia, después los suma y nos muestra los totales por país
+
+La vista se crea de la manera siguiente:
+```
+create view covid_stats as (
+	with last_updates as (
+		select ps.id_hospital, lower(h2.province) as province, lower(h2.country) as country, extract(year from ps.last_update) as año, extract(month from ps.last_update) as mes, max(ps.last_update) as max_update 
+		from patient_statistics ps join hospital h2 using (id_hospital)
+		group by ps.id_hospital, extract(year from ps.last_update), extract(month from ps.last_update), lower(h2.province), lower(h2.country) order by ps.id_hospital asc)
+	select lu.province, lu.country, lu.año, lu.mes, sum(ps2.amount_last_month_deaths_by_covid) as covid_deaths, sum(ps2.amount_last_month_recovered_from_covid) as covid_recovered,
+	sum(ps2.amount_last_month_tested_positive_covid) as covid_positive, sum(ps2.amount_last_month_in_intensive_care_wcovid) as covid_intensive_care
+	from hospital h join patient_statistics ps2 using (id_hospital)
+	join last_updates lu using (id_hospital) where ps2.last_update = lu.max_update
+	group by rollup (lu.country, lu.province, lu.año, lu.mes) order by country asc);
+```
+
+Se llama de la siguiente forma:
+```
+select * from covid_stats;
+```
+
+y se da de baja:
+```
+drop view covid_stats;
+```
