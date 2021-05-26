@@ -6,7 +6,7 @@ Sabemos que nuestros recursos no son ilimitados, por lo que los hospitales en si
 
 Para eso es necesario conocer el promedio de dias disponibles para cada uno de los artículos necesarios para el correcto funcionamiento. Esto es necesario hacerlo a nivel país y provincia con los promedios de los hospitales en cada región. Además tampoco está de más saber en promedio cómo se encuentra cada hospital individualmente, ya que nos indicará como ha estado trabajando ese hospital mes por mes.
 
-### Promedio de inventario por país (Vista 1)
+### Promedio de inventario por país y por mes (Vista 1)
 
 La vista primero obtiene las última actualización de inventario de cada hospital individualmente. Despúes trabaja con los inventarios (verificando igualdad de fechas) de esa fecha para obtener el promedio de cada uno de los artículos agrupándolos por el país y ordenándolos alfabéticamente.
 
@@ -34,7 +34,7 @@ y se da de baja:
 drop view needs_by_country;
 ```
 
-### Promedio de inventario por provincia (Vista 2)
+### Promedio de inventario por provincia y por mes (Vista 2)
 
 La vista sigue el mismo procedimiento que la de país, sin embargo, ahora el criterio de agrupación usado para los promedios es el de provincia. También se decidió seguir mostrando el país, ya que es bueno saber a donde pertenece cada provincia
 
@@ -124,7 +124,7 @@ y se da de baja:
 drop view hosp_graves;
 ```
 
-### Porcentajes de medidas adoptadas por país (Vista 5)
+### Porcentajes de medidas adoptadas por país y por mes (Vista 5)
 
 De la misma forma resulta útil ver, por cada país, el porcentaje de implementación de cada una de las medidas o protocolos. De esa forma podríamos ver que necesita cada país y si se necesitan nuevas estrategias para hacer llegar ciertas medidas dada la particular situación de cada uno.
 
@@ -157,7 +157,7 @@ create view protocols_percentage_country as (
 
 Se llama de la siguiente forma:
 ```
-select * protocols_percentage_country;
+select * from protocols_percentage_country;
 ```
 
 y se da de baja:
@@ -173,9 +173,53 @@ De la misma forma que no tenemos un inventario ilimitado, en épocas de pandemia
 
 La cantidad de personal médico por país es un índice importante a tomar en cuenta, en especial, porque nos da la idea de cómo es que está el sector de salud en el país. También, nos comparte la información, de cuantos personal médico hay para atender todos los casos de COVID-19 y con eso, poder corroborar, si el sistema de salud está colapsado o no. Con esa información, doctores de otros países pueden ser enviados como ayuda a los más necesitados.  
 
+La vista se crea de la manera siguiente:
+```
+create view staff_by_country as (
+	with last_updates as(
+		select s2.id_hospital, extract(year from s2.last_update) as año, extract(month from s2.last_update) as mes, max(s2.last_update) as max_update from staff s2
+		group by s2.id_hospital, extract(year from s2.last_update), extract(month from s2.last_update) order by s2.id_hospital asc)
+	select lower(h.country), lu.año, lu.mes, sum(s.amount_of_doctors_in_hospital) as number_doctors, sum(s.amount_of_paramedical_staff_in_hospital) as number_paramedics
+	from hospital h join staff s using (id_hospital) join last_updates lu using (id_hospital)
+	where s.last_update = lu.max_update
+	group by lower(h.country), lu.año, lu.mes order by lower(h.country) asc);
+```
+
+Se llama de la siguiente forma:
+```
+select * from staff_by_country;
+```
+
+y se da de baja:
+```
+drop view staff_by_country;
+```
+
 ### Staff por provincia (Vista 7)
 
-Al igual que analizamos los doctores por país, es importante analizar las provincias. Tanto entre países, como dentro de ellos, en sus provincias, va a existir una heterogeniedad que tenemos que tomar en cuenta. Ciertas áreas de un país pueden estar en peor situación que otras, y esto es importante saberlo
+Al igual que analizamos los doctores por país, es importante analizar las provincias. Tanto entre países, como dentro de ellos, en sus provincias, va a existir una heterogeniedad que tenemos que tomar en cuenta. Ciertas áreas de un país pueden estar en peor situación que otras, y esto es importante saberlo.
+
+La vista se crea de la manera siguiente:
+```
+create view staff_by_country as (
+	with last_updates as(
+		select s2.id_hospital, extract(year from s2.last_update) as año, extract(month from s2.last_update) as mes, max(s2.last_update) as max_update from staff s2
+		group by s2.id_hospital, extract(year from s2.last_update), extract(month from s2.last_update) order by s2.id_hospital asc)
+	select lower(h.province), lower(h.country), lu.año, lu.mes, sum(s.amount_of_doctors_in_hospital) as number_doctors, sum(s.amount_of_paramedical_staff_in_hospital) as number_paramedics
+	from hospital h join staff s using (id_hospital) join last_updates lu using (id_hospital)
+	where s.last_update = lu.max_update
+	group by lower(h.province), lower(h.country), lu.año, lu.mes order by lower(h.country) asc);
+```
+
+Se llama de la siguiente forma:
+```
+select * from staff_by_country;
+```
+
+y se da de baja:
+```
+drop view staff_by_country;
+```
 
 ## Vista 3: Recuperados de COVID
 
