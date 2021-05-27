@@ -1,6 +1,22 @@
---Creaci髇 de BD VOXMAPP--
+--Creaci贸n de BD VOXMAPP--
 
---Creaci髇 de la tabla Hospital--
+--Creaci贸n de la tabla Country--
+create table country(
+	id_country serial not null,
+	country varchar(200) not null,
+	CONSTRAINT country_pkey PRIMARY KEY (id_country)
+);
+
+--Creaci贸n de la tabla province--
+create table province(
+	id_province serial not null,
+	id_country int4 not null,
+	province varchar(200) not null,
+	CONSTRAINT province_pkey PRIMARY KEY (id_province),
+	CONSTRAINT country_id_province_fkey FOREIGN KEY (id_country) REFERENCES country(id_country) ON UPDATE CASCADE ON DELETE restrict
+);
+
+--Creaci贸n de la tabla Hospital--
 create table hospital(
 	id_hospital serial not null, 
 	latitude varchar (30) not null,
@@ -8,14 +24,16 @@ create table hospital(
 	altitude varchar (30) not null,
 	name_hospital varchar(200) not null,
 	district varchar(200) not null,
-	province varchar(200) not null,
-	country varchar(200) not null,
+	id_province int4 not null,
+	id_country int4 not null,
 	type_of_hospital varchar(200),
 	last_update timestamp NOT NULL DEFAULT now(),
-	CONSTRAINT hospital_pkey PRIMARY KEY (id_hospital)
+	CONSTRAINT hospital_pkey PRIMARY KEY (id_hospital),
+	CONSTRAINT country_id_hospital_fkey FOREIGN KEY (id_country) REFERENCES country(id_country) ON UPDATE CASCADE ON DELETE restrict,
+	CONSTRAINT provience_id_users_fkey FOREIGN KEY (id_province) REFERENCES province(id_province) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
---Creaci髇 de la tabla user--
+--Creaci贸n de la tabla user--
 create table users(
 id_users serial not null,
 u_name varchar(200) not null,
@@ -26,7 +44,7 @@ last_update timestamp not null default now(),
 constraint users_pkey primary key (id_users)
 );
 
---Creaci髇 de tabla Interview--
+--Creaci贸n de tabla Interview--
 create table interview(
 	id_interview serial not null,
 	id_hospital int4 not null,
@@ -41,7 +59,7 @@ create table interview(
 	CONSTRAINT interview_id_users_fkey FOREIGN KEY (id_users) REFERENCES users(id_users) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
---Creaci髇 de la tabla tel閒ono--
+--Creaci贸n de la tabla tel茅fono--
 create table telephone(
 	id_telephone serial not null,
 	id_hospital int4 not null,
@@ -52,7 +70,7 @@ create table telephone(
 	CONSTRAINT telephone_id_hospital_fkey FOREIGN KEY (id_hospital) REFERENCES hospital(id_hospital) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
---Creaci髇 de la tabla contacto--
+--Creaci贸n de la tabla contacto--
 create table contact(
 	id_contact serial not null,
 	id_hospital int4 not null,
@@ -61,7 +79,7 @@ create table contact(
 	CONSTRAINT contact_id_hospital_fkey FOREIGN KEY (id_hospital) REFERENCES hospital(id_hospital) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
---Creaci髇 de la tabla persona--
+--Creaci贸n de la tabla persona--
 create table person( 
 	id_person serial not null,
 	id_contact int4 not null,
@@ -74,7 +92,7 @@ create table person(
 	CONSTRAINT person_id_contact_fkey FOREIGN KEY (id_contact) REFERENCES contact(id_contact) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
---Creaci髇 de la tabla inventario--
+--Creaci贸n de la tabla inventario--
 create table inventory(
 	id_inventory serial not null,
 	id_hospital int4 not null,
@@ -95,7 +113,7 @@ create table inventory(
 	CONSTRAINT inventory_id_hospital_fkey FOREIGN KEY (id_hospital) references hospital(id_hospital) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
---Creaci髇 de la tabla staff--
+--Creaci贸n de la tabla staff--
 create table staff(
 	id_staff serial not null, 
 	id_hospital int4 not null,
@@ -106,7 +124,7 @@ create table staff(
 	CONSTRAINT staff_id_hospital_fkey FOREIGN KEY (id_hospital) references hospital(id_hospital) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
---Creaci髇 de la tabla Protocolo Covid--
+--Creaci贸n de la tabla Protocolo Covid--
 create table covid_protocol(
 	id_covid_protocol serial not null,
 	id_hospital int4 not null,
@@ -121,7 +139,7 @@ create table covid_protocol(
 	CONSTRAINT covid_protocol_id_hospital_fkey FOREIGN KEY (id_hospital) references hospital(id_hospital) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
---Creaci髇 de la tabla estadisticas paciente--
+--Creaci贸n de la tabla estadisticas paciente--
 create table patient_statistics(
 	id_patient_statistics serial not null,
 	id_hospital int4 not null,
@@ -136,7 +154,7 @@ create table patient_statistics(
 	CONSTRAINT patient_statistics_id_hospital_fkey FOREIGN KEY (id_hospital) references hospital(id_hospital) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
---Creaci髇 de la tabla Estructura Hospital--
+--Creaci贸n de la tabla Estructura Hospital--
 create table hospital_structure (
 	id_hospital_structure serial not null,
 	id_hospital int4 not null,
