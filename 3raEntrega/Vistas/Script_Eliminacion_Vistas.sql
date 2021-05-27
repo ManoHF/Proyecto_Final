@@ -28,4 +28,4 @@ drop view covid_stats;
 drop view deaths_stats_country;
 
 -- Vista 10
-drop view deaths_stats_by_province;
+drop view deaths_stats_by_hospital;
