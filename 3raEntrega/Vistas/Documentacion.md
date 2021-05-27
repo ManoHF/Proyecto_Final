@@ -327,7 +327,7 @@ y se da de baja:
 drop view deaths_stats_country;
 ```
 
-### Comparación entre muertes COVID y no COVID por país (Vista 10)
+### Comparación entre muertes COVID y no COVID por hospital (Vista 10)
 
 Como se ha venido haciendo, pasamos a comparar las muertes COVID y no COVID ahora por provincia. Sin embargo, en esta vista, en lugar de obtener la diferencia entre el número de muertes, obtenemos el porcentaje de muertes COVID por provincia.
 
@@ -351,10 +351,10 @@ with last_updates as(
 
 Se llama de la siguiente forma:
 ```
-select * from deaths_stats_by_province;
+select * from deaths_stats_by_hospital;
 ```
 
 y se da de baja:
 ```
-drop view deaths_stats_by_province;
+drop view deaths_stats_by_hospital;
 ```
