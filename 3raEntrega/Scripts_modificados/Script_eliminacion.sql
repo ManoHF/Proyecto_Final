@@ -21,3 +21,7 @@ drop table interview;
 drop table hospital;
 
 drop table users;
+
+drop table province;
+
+drop table country;
