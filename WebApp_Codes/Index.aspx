@@ -33,8 +33,15 @@
             </asp:DropDownList> <asp:Label ID="lbHos" runat="server" Text="" ForeColor="Red" Font-Size="Large"></asp:Label> <br />
             <h3 style="color:white; font-family:'Courier New'">
                 If it is not in the list, register it here: <br /><br />
-                Latitude:&nbsp;&nbsp;&nbsp;  <asp:TextBox ID="tbLat" runat="server"></asp:TextBox> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <asp:TextBox ID="tbNom" runat="server"></asp:TextBox> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Country: <asp:TextBox ID="tbPa" runat="server"></asp:TextBox> <br />
-                Lengths:&nbsp;&nbsp;&nbsp;&nbsp; <asp:TextBox ID="tbLon" runat="server"></asp:TextBox> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Province:&nbsp; <asp:TextBox ID="tbPro" runat="server"></asp:TextBox> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Type:&nbsp;&nbsp;&nbsp;
+                Latitude:&nbsp;&nbsp;&nbsp;  <asp:TextBox ID="tbLat" runat="server"></asp:TextBox> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <asp:TextBox ID="tbNom" runat="server"></asp:TextBox> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Country: 
+                <asp:DropDownList ID="ddPais" runat="server" Height="26px" Width="161px">
+                </asp:DropDownList>
+                <br />
+                Lengths:&nbsp;&nbsp;&nbsp;&nbsp; <asp:TextBox ID="tbLon" runat="server"></asp:TextBox> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Province:&nbsp;  
+                <asp:DropDownList ID="ddProv" runat="server" Height="16px" Width="166px">
+                </asp:DropDownList>
+                &nbsp;<asp:Button ID="Button3" runat="server" OnClick="Button3_Click" Text="Update" />
+&nbsp;&nbsp;Type:&nbsp;&nbsp;&nbsp;
                 <asp:TextBox ID="tbTipo" runat="server"></asp:TextBox>
                 <br />
                 Altitude:&nbsp;&nbsp;&nbsp;&nbsp;<asp:TextBox ID="tbAlt" runat="server"> </asp:TextBox> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; District:&nbsp;&nbsp;<asp:TextBox ID="tbDis" runat="server"></asp:TextBox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
