@@ -14,8 +14,8 @@ namespace Proyecto_BD
         private double altura;
         private string nombre;
         private string distrito;
-        private string provincia;
-        private string pais;
+        private int provincia;
+        private int pais;
         private string tipo_hospital;
         Hospital h;
 
@@ -23,7 +23,7 @@ namespace Proyecto_BD
         {
         }
 
-        public Hospital(double latitud, double longitud, double altura, string nombre, string distrito, string provincia, string pais, string tipo_hospital)
+        public Hospital(double latitud, double longitud, double altura, string nombre, string distrito, int provincia, int pais, string tipo_hospital)
         {
             this.latitud = latitud;
             this.longitud = longitud;
@@ -42,8 +42,8 @@ namespace Proyecto_BD
             NpgsqlDataReader rd;
             int res=-1;
             String q = "Select currval(pg_get_serial_sequence('voxmapp.hospital', 'id_hospital'))";
-            String query = "insert into voxmapp.hospital (latitude, lengths, altitude, name_hospital, district, province, country, type_of_hospital, last_update) values (" +
-                latitud + ", " + longitud + ", " + altura + ", " + "'" + nombre + "', '" + distrito + "', '" + provincia + "', '" + pais + "', '" + tipo_hospital + "', now())";
+            String query = "insert into voxmapp.hospital (latitude, lengths, altitude, name_hospital, district, id_province, id_country, type_of_hospital, last_update) values (" +
+                latitud + ", " + longitud + ", " + altura + ", " + "'" + nombre + "', '" + distrito + "', " + provincia + ", " + pais + ", '" + tipo_hospital + "', now())";
             try
             {
                 cmd2 = new NpgsqlCommand(query, con);
