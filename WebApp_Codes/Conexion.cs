@@ -53,6 +53,56 @@ namespace Proyecto_BD
             }
         }
 
+        public static void llenarProvincia(DropDownList dd, int id_pais)
+        {
+            String query = "select province from voxmapp.province where id_country=" + id_pais;
+
+            try
+            {
+                NpgsqlConnection con;
+                NpgsqlDataReader rd;
+                con = Conexion.agregarConexion();
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                rd = cmd.ExecuteReader();
+                dd.Items.Add("[Select province]");
+                while (rd.Read())
+                {
+                    dd.Items.Add(rd.GetString(0));
+                }
+                dd.SelectedIndex = 0;
+                rd.Close();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public static void llenarPais(DropDownList dd)
+        {
+            try
+            {
+                NpgsqlConnection con;
+                NpgsqlDataReader rd;
+                con = Conexion.agregarConexion();
+                NpgsqlCommand cmd = new NpgsqlCommand("select country from voxmapp.country", con);
+                rd = cmd.ExecuteReader();
+                dd.Items.Add("[Select country]");
+                while (rd.Read())
+                {
+                    dd.Items.Add(rd.GetString(0));
+                }
+                dd.SelectedIndex = 0;
+                rd.Close();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         public static void llenarDDLYN(DropDownList dd)
         {
             try
