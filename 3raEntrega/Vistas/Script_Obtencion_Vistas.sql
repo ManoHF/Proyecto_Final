@@ -1,4 +1,4 @@
--- Obtención de la informacion contenida en las vistas
+-- ObtenciÃ³n de la informacion contenida en las vistas
 
 -- Vista 1
 select * from needs_by_country;
@@ -28,4 +28,4 @@ select * from covid_stats;
 select * from deaths_stats_country;
 
 -- Vista 10
-select * from deaths_stats_by_province;
+select * from deaths_stats_by_hospital;
