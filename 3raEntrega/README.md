@@ -1,4 +1,4 @@
-### 3ra Entrega
+# 3ra Entrega
 
 La carpeta contiene los entregables que se centran en la creación de vistas analíticas para la empresa VOXMAPP. Además se añade la imagen del diagrama ER actualizado junto a todos
 los scripts nuevos con base a las recomendaciones dadas durante las presentaciones.
