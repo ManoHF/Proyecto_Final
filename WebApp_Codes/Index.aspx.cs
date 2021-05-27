@@ -52,18 +52,20 @@ namespace Proyecto_BD
                 Users u = new Users();
                 u.llenaDDLUsers(ddlUser);
 
-                
-
-            }
+                Conexion.llenarPais(ddPais);
+                ddProv.Items.Add("Select country first");       
+            }           
         }
 
         protected void Button1_Click(object sender, EventArgs e)
         {
             Hospital h = new Hospital(Convert.ToDouble(tbLat.Text), Convert.ToDouble(tbLon.Text), Convert.ToDouble(tbAlt.Text),
-                tbNom.Text, tbDis.Text, tbPro.Text, tbPa.Text, tbTipo.Text); 
+                tbNom.Text, tbDis.Text, ddProv.SelectedIndex, ddPais.SelectedIndex, tbTipo.Text); 
 
-            tbLat.Text = ""; tbAlt.Text = ""; tbDis.Text = ""; tbPa.Text = "";
-            tbLon.Text = ""; tbNom.Text = ""; tbPro.Text = ""; tbTipo.Text = "";
+            tbLat.Text = ""; tbAlt.Text = ""; tbDis.Text = ""; ddPais.SelectedIndex = 0;
+            tbLon.Text = ""; tbNom.Text = ""; tbTipo.Text = "";
+
+            ddProv.Items.Clear(); ddProv.Items.Add("Select country first");
 
             int res = h.registraHospital();
             id_hospital = res;
@@ -279,6 +281,15 @@ namespace Proyecto_BD
                 lbPhone.Text = "Created successfully";
             else
                 lbPhone.Text = "Register failed";
+        }
+
+        protected void Button3_Click(object sender, EventArgs e)
+        {
+            if (ddPais.SelectedIndex != 0)
+            {
+                ddProv.Items.Clear();
+                Conexion.llenarProvincia(ddProv, ddPais.SelectedIndex);
+            }
         }
     }
 }
