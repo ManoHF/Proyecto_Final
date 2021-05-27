@@ -11,3 +11,5 @@ DELETE FROM telephone;
 DELETE FROM interview;
 DELETE FROM hospital;
 DELETE FROM users;
+DELETE FROM province;
+DELETE FROM country;
