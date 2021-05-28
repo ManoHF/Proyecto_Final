@@ -15,3 +15,14 @@ Por esa razón, en nuestro caso, para ver los tableros se necesita ingresar desd
 Link para entrar con correo itam:
 * https://app.powerbi.com/groups/me/reports/0e8c6551-beec-4c73-a3b3-845b709c81c4/ReportSectiona136fec52e4a02b71170?ctid=bc5eb999-89e3-4663-b72f-13c503ec23cc
 
+## Conexión con la Base de Datos
+
+![WhatsApp Image 2021-05-28 at 13 42 00](https://user-images.githubusercontent.com/70402438/120031198-1ca1f680-bfbe-11eb-9f40-ad0fa7fe87c2.jpeg)
+
+![WhatsApp Image 2021-05-28 at 13 42 00 (1)](https://user-images.githubusercontent.com/70402438/120031203-1e6bba00-bfbe-11eb-84b1-5be07d615980.jpeg)
+
+![WhatsApp Image 2021-05-28 at 13 42 00 (2)](https://user-images.githubusercontent.com/70402438/120031212-20357d80-bfbe-11eb-9503-5b4883884c62.jpeg)
+
+![WhatsApp Image 2021-05-28 at 13 42 00 (3)](https://user-images.githubusercontent.com/70402438/120031221-23c90480-bfbe-11eb-8d2c-160906e1a7a9.jpeg)
+
+
