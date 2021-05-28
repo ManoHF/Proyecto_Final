@@ -2,10 +2,11 @@
 
 Para la presentación de los tableros se va a utilizar la aplicación Power BI, una App accesible para cualquier usuario. Por lo tanto, para poder trabajar con Power BI, primero, hay que descargar la aplicación de escritorio, puesto que, ahí es donde se desarrollan los tableros. Una vez descargado, se debe de realizar la conéxion, la cual se hace directo desde la aplicación Power Bi por medio de esta interfaz.   
 
-Se le da click en donde dice más, para buscar la conexión a una base de datos de PostgreSQL
+Se le da click en donde dice 'Más', para buscar la conexión a una base de datos de PostgreSQL
 ![db6](https://user-images.githubusercontent.com/70402438/120031221-23c90480-bfbe-11eb-8d2c-160906e1a7a9.jpeg)
 
-Ahí, le damos click en PostgreSQL
+Ahí, le damos click en 'Base de datos PostgreSQL'
+
 ![db5](https://user-images.githubusercontent.com/70402438/120031212-20357d80-bfbe-11eb-9503-5b4883884c62.jpeg)
 
 El análisis de los datos recibidos por parte de las entrevistas realizadas se verá reflejada en un dashboard creado mediante el uso de Power BI. Para su uso completo, requiere de una suscripción mensual de 8.40 Euros al mes. Además, la aplicación permite a los usuarios de Voxmapp trabajar colaborativamente en la presentación de los datos.
