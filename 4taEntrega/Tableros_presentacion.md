@@ -12,7 +12,7 @@ Ahí, le damos clic en 'Base de datos PostgreSQL'
 Después, se deben de llenar los datos correspondientes, como el 'Servidor' en donde se encuentra la base de datos y el nombre de la 'Base de datos' de donde se quieren tomar los datos. Le damos clic en aceptar, y se conecta con la base.
 ![db4](https://user-images.githubusercontent.com/70402438/120031203-1e6bba00-bfbe-11eb-84b1-5be07d615980.jpeg)
 
-Una vez ahí, ya se importan las tablas o vistas, con las que se quieren trabajar para poder hacer los dashboards. Su menú de opciones es muy intuitivo, por lo que es muy complicado perderse. Es una aplicación parecida a Excel, puesto que, también se pueden manejar tablas para ver y modificar el formato de los datos. Tiene una opción para poder actualizar las tablas en tiempo real, o también, se puede programar cada cuando queremos que se actualice. 
+Una vez ahí, ya se importan las tablas o vistas con las que se quieren trabajar para poder hacer los dashboards. Su menú de opciones es muy intuitivo, por lo que es muy complicado perderse. Es una aplicación parecida a Excel, puesto que, también se pueden manejar tablas para ver y modificar el formato de los datos. Tiene una opción para poder actualizar las tablas en tiempo real, o también, se puede programar cada cuando queremos que se actualice. 
 
 Por ultimo, una vez realizado el dashboard, para que se pueda compartir y sea visible para los demás, se debe de publicar. 
 ![db3](https://user-images.githubusercontent.com/70402438/120031198-1ca1f680-bfbe-11eb-9f40-ad0fa7fe87c2.jpeg)
