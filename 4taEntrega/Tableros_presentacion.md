@@ -9,6 +9,9 @@ Ahí, le damos click en 'Base de datos PostgreSQL'
 
 ![db5](https://user-images.githubusercontent.com/70402438/120031212-20357d80-bfbe-11eb-9503-5b4883884c62.jpeg)
 
+Después, se deben de llenar los datos correspondientes, como el 'Servidor' en donde se encuentra la base de datos y el nombre de la 'Base de datos' de donde se quieren tomar los datos. 
+![db4](https://user-images.githubusercontent.com/70402438/120031203-1e6bba00-bfbe-11eb-84b1-5be07d615980.jpeg)
+
 El análisis de los datos recibidos por parte de las entrevistas realizadas se verá reflejada en un dashboard creado mediante el uso de Power BI. Para su uso completo, requiere de una suscripción mensual de 8.40 Euros al mes. Además, la aplicación permite a los usuarios de Voxmapp trabajar colaborativamente en la presentación de los datos.
 
 ![db1](https://user-images.githubusercontent.com/70402438/119917755-c5a01100-bf2c-11eb-97cd-0b128010e04b.png)
@@ -26,7 +29,7 @@ Link para entrar con correo itam:
 
 ![db3](https://user-images.githubusercontent.com/70402438/120031198-1ca1f680-bfbe-11eb-9f40-ad0fa7fe87c2.jpeg)
 
-![db4](https://user-images.githubusercontent.com/70402438/120031203-1e6bba00-bfbe-11eb-84b1-5be07d615980.jpeg)
+
 
 
 
