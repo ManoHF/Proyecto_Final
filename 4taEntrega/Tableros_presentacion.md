@@ -19,10 +19,10 @@ Link para entrar con correo itam:
 
 ![db3](https://user-images.githubusercontent.com/70402438/120031198-1ca1f680-bfbe-11eb-9f40-ad0fa7fe87c2.jpeg)
 
-![WhatsApp Image 2021-05-28 at 13 42 00 (1)](https://user-images.githubusercontent.com/70402438/120031203-1e6bba00-bfbe-11eb-84b1-5be07d615980.jpeg)
+![db4](https://user-images.githubusercontent.com/70402438/120031203-1e6bba00-bfbe-11eb-84b1-5be07d615980.jpeg)
 
-![WhatsApp Image 2021-05-28 at 13 42 00 (2)](https://user-images.githubusercontent.com/70402438/120031212-20357d80-bfbe-11eb-9503-5b4883884c62.jpeg)
+![db5](https://user-images.githubusercontent.com/70402438/120031212-20357d80-bfbe-11eb-9503-5b4883884c62.jpeg)
 
-![WhatsApp Image 2021-05-28 at 13 42 00 (3)](https://user-images.githubusercontent.com/70402438/120031221-23c90480-bfbe-11eb-8d2c-160906e1a7a9.jpeg)
+![db6](https://user-images.githubusercontent.com/70402438/120031221-23c90480-bfbe-11eb-8d2c-160906e1a7a9.jpeg)
 
 
