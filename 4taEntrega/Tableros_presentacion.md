@@ -10,3 +10,6 @@ Esta aplicación permite la creación de gráficos variados y de gran calidad co
 
 Por esa razón, en nuestro caso, para ver los tableros se necesita ingresar desde un correo de nuestra organización, es decir, un correo con terminación @itam.mx, ya que no se tiene desbloqueado la publicación web.
 
+Link para entrar con correo itam:
+* https://app.powerbi.com/groups/me/reports/0e8c6551-beec-4c73-a3b3-845b709c81c4/ReportSectiona136fec52e4a02b71170?ctid=bc5eb999-89e3-4663-b72f-13c503ec23cc
+
