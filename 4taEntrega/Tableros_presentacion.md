@@ -1,5 +1,7 @@
 # Tableros de presentación
 
+Para la presentación de los tableros se va a utilizar la aplicación Power BI, una App accesible para cualquier usuario. Por lo tanto, para poder trabajar con Power BI, primero, hay que descargar la aplicación de escritorio, puesto que, ahí es donde se desarrollan los tableros. Una vez descargado, se debe de realizar la conéxion, la cual se hace directo desde la aplicación Power Bi por medio de esta interfaz.   
+
 El análisis de los datos recibidos por parte de las entrevistas realizadas se verá reflejada en un dashboard creado mediante el uso de Power BI. Para su uso completo, requiere de una suscripción mensual de 8.40 Euros al mes. Además, la aplicación permite a los usuarios de Voxmapp trabajar colaborativamente en la presentación de los datos.
 
 ![db1](https://user-images.githubusercontent.com/70402438/119917755-c5a01100-bf2c-11eb-97cd-0b128010e04b.png)
