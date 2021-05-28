@@ -17,7 +17,7 @@ Link para entrar con correo itam:
 
 ## Conexión con la Base de Datos
 
-![WhatsApp Image 2021-05-28 at 13 42 00](https://user-images.githubusercontent.com/70402438/120031198-1ca1f680-bfbe-11eb-9f40-ad0fa7fe87c2.jpeg)
+![db3](https://user-images.githubusercontent.com/70402438/120031198-1ca1f680-bfbe-11eb-9f40-ad0fa7fe87c2.jpeg)
 
 ![WhatsApp Image 2021-05-28 at 13 42 00 (1)](https://user-images.githubusercontent.com/70402438/120031203-1e6bba00-bfbe-11eb-84b1-5be07d615980.jpeg)
 
